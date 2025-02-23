@@ -1,0 +1,6 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=.;Database=SampleTest;user id=sa;password=123@medis;Integrated Security=False;Encrypt=True;TrustServerCertificate=True;"
+    //"DefaultConnection": "Server=.;Database=Sample;user id=sa;password=123@medis;Integrated Security=False;Encrypt=True;TrustServerCertificate=True;"
+  }
+}
