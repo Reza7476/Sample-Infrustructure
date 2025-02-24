@@ -33,7 +33,7 @@ public class UserAppService : IUserService
         return user.Id;
     }
 
-    public async Task<List<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null)
+    public async Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null)
     {
       return await _repository.GetAllUsers(pagination);
     }

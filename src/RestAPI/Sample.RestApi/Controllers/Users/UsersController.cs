@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sample.Application.Users.Dtos;
 using Sample.Application.Users.Services;
+using Sample.Commons.Interfaces;
 
 namespace Sample.RestApi.Controllers.Users;
 [Route("api/users")]
@@ -21,7 +22,7 @@ public class UsersController : ControllerBase
     }
     
     [HttpGet("all")]
-    public Task <List<GetAllUsersDto>> GetAllUsers()
+    public Task <IPageResult<GetAllUsersDto>> GetAllUsers()
     {
         return _service.GetAllUsers();
     }

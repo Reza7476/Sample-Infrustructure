@@ -40,9 +40,9 @@ public class UserServiceTests : BusinessUnitTest
         Save(user);
         
         var expected = await _sut.GetAllUsers();
-
-        expected.First().Email.Should().Be(user.Email); 
-        expected.First().Name.Should().Be(user.Name);   
-        expected.First().Id.Should().Be(user.Id);
+        
+        expected.Elements.First().Email.Should().Be(user.Email); 
+        expected.Elements.First().Name.Should().Be(user.Name);   
+        expected.Elements.First().Id.Should().Be(user.Id);
     }
 }
