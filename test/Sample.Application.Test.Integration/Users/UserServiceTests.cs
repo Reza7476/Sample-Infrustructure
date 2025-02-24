@@ -6,7 +6,7 @@ using Sample.Test.Tools.Infrastructure.DataBaseConfig.Integration;
 
 namespace Sample.Application.Test.Integration.Users;
 
-public class UserServiceTests: BusinessIntegrationTest
+public class UserServiceTests : BusinessIntegrationTest
 {
     private readonly IUserService _sut;
 

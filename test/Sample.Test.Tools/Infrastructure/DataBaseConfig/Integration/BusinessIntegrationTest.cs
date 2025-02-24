@@ -49,7 +49,8 @@ public class EFDataContextDatabaseFixture : DataBaseFixture
 
 public class PersistenceConfig
 {
-    public string ConnectionString { get; set; } = default!;
+    public string ConnectionString { get; set; } = "Server=.;Database=Medis-Sample-Test;user id=sa;password=123@medis;Integrated Security=False;Encrypt=True;TrustServerCertificate=True;";
+  
 }
 
 
