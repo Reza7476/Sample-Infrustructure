@@ -8,10 +8,7 @@ public class UserEntityMap : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> _)
     {
-        _.ToTable("Users")
-            .HasKey(_ => _.Id);
-
-        _.Property(_ => _.Id).IsRequired().ValueGeneratedOnAdd();
+        _.ToTable("Users");
 
         _.Property(_ => _.Name).IsRequired();
 
