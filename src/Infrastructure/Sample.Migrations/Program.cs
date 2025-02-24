@@ -28,7 +28,12 @@ class Program
         var runner = serviceProvider.GetRequiredService<IMigrationRunner>();
 
         Console.WriteLine("Starting database migrations...");
-        runner.MigrateUp();
+        //runner.MigrateUp();
+
+        runner.MigrateDown(0);
+
+
+
         Console.WriteLine("Database migrations completed!");
     }
 

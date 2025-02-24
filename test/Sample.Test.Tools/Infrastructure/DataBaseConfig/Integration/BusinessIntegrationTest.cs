@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Sample.Persistence.EF.Persistence;
 using System.Transactions;
 
@@ -38,8 +39,11 @@ public class EFDataContextDatabaseFixture : DataBaseFixture
             .Build();
         var testSettings = new PersistenceConfig();
         settings.Bind("PersistenceConfig", testSettings);
+        
+        var optionsBuilder = new DbContextOptionsBuilder<EFDataContext>();
+        optionsBuilder.UseSqlServer(testSettings.ConnectionString);
 
-        return new EFDataContext(testSettings.ConnectionString);
+         return new EFDataContext(optionsBuilder.Options);
     }
 }
 

@@ -1,8 +1,9 @@
-﻿namespace Sample.Core.Entities.Users;
+﻿using Sample.Core.Entities.Generals;
 
-public class User
+namespace Sample.Core.Entities.Users;
+
+public class User : BaseEntity
 {
-    public long Id { get; set; }
     public string Name { get; set; } = default!;
     public string Email { get; set; } = default!;
 }
