@@ -1,4 +1,4 @@
-﻿using Sample.Persistence.EF.Persistence;
+﻿using Sample.Persistence.EF.DbContexts;
 
 namespace Sample.Test.Tools.Infrastructure.DataBaseConfig.Unit;
 

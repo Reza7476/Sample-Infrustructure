@@ -1,6 +1,8 @@
-﻿namespace Sample.Commons.UnitOfWork;
+﻿using Sample.Commons.Interfaces;
 
-public interface IUnitOfWork
+namespace Sample.Commons.UnitOfWork;
+
+public interface IUnitOfWork : IScope
 {
     Task Begin();
     Task Commit();

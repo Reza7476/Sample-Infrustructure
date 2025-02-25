@@ -25,6 +25,7 @@ public class UserAppService : IUserService
         {
             Email = dto.Email,
             Name = dto.Name,
+            CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
         };
 
         await _repository.Add(user);
@@ -35,6 +36,6 @@ public class UserAppService : IUserService
 
     public async Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null)
     {
-      return await _repository.GetAllUsers(pagination);
+        return await _repository.GetAllUsers(pagination);
     }
 }

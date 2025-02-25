@@ -12,12 +12,6 @@ public class EFDataContext : DbContext
     {
     }
 
-    //public EFDataContext(string connectionString)
-    //    : this(new DbContextOptionsBuilder<EFDataContext>()
-    //         .UseSqlServer(connectionString).Options)
-    //{
-    //}
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

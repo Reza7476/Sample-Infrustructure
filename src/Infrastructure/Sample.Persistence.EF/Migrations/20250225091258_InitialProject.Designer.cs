@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Sample.Persistence.EF.Persistence;
+using Sample.Persistence.EF.DbContexts;
 
 #nullable disable
 
 namespace Sample.Persistence.EF.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    [Migration("20250224084524_InitialProject")]
+    [Migration("20250225091258_InitialProject")]
     partial class InitialProject
     {
         /// <inheritdoc />
@@ -53,6 +53,20 @@ namespace Sample.Persistence.EF.Migrations
                     b.UseTptMappingStrategy();
                 });
 
+            modelBuilder.Entity("Sample.Core.Entities.Employees.Employee", b =>
+                {
+                    b.HasBaseType("Sample.Core.Entities.Generals.BaseEntity");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("Employees", (string)null);
+                });
+
             modelBuilder.Entity("Sample.Core.Entities.Users.User", b =>
                 {
                     b.HasBaseType("Sample.Core.Entities.Generals.BaseEntity");
@@ -66,6 +80,15 @@ namespace Sample.Persistence.EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Sample.Core.Entities.Employees.Employee", b =>
+                {
+                    b.HasOne("Sample.Core.Entities.Generals.BaseEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Sample.Core.Entities.Employees.Employee", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Sample.Core.Entities.Users.User", b =>

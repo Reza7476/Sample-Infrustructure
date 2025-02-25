@@ -3,8 +3,8 @@ using Sample.Application.Users.Dtos;
 using Sample.Application.Users.Services;
 using Sample.Commons.Interfaces;
 using Sample.Core.Entities.Users;
+using Sample.Persistence.EF.DbContexts;
 using Sample.Persistence.EF.Extensions.Paginations;
-using Sample.Persistence.EF.Persistence;
 
 
 namespace Sample.Persistence.EF.Repositories.Users;
@@ -34,6 +34,6 @@ public class EFUserRepository : IUserRepository
         }).AsQueryable();
 
 
-        return await  query.Paginate(pagination ?? new Pagination());
+        return await query.Paginate(pagination ?? new Pagination());
     }
 }
