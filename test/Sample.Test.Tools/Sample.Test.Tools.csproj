@@ -12,12 +12,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Application\Sample.Application\Sample.Application.csproj" />
-    <ProjectReference Include="..\..\src\Infrastructure\Sample.Migrations\Sample.Migrations.csproj" />
     <ProjectReference Include="..\..\src\Infrastructure\Sample.Persistence.EF\Sample.Persistence.EF.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="appsettings.json">
+    <None Update="testAppSettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

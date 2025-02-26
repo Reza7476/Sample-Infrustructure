@@ -3,7 +3,7 @@ using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Sample.Application.Users;
 using Sample.Commons.Interfaces;
-using Sample.Persistence.EF.Persistence;
+using Sample.Persistence.EF.DbContexts;
 using Sample.Persistence.EF.Repositories.Users;
 
 namespace Sample.RestApi.Configs.Services;
@@ -43,7 +43,7 @@ public class AutofactModule : Module
         //.SingleInstance(); ===>AddSingleton()
 
         container.RegisterAssemblyTypes(serviceAssembely)
-         .AssignableTo<Service>()
+         .AssignableTo<IService>()
          .AsImplementedInterfaces()
          .InstancePerLifetimeScope();
         //.InstancePerDependency();===>AddTransient()

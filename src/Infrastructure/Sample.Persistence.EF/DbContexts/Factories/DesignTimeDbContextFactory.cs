@@ -10,7 +10,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<EFDataCont
     {
         var configuration = new ConfigurationBuilder()//                ConfigurationBuilder()
                .SetBasePath(Directory.GetCurrentDirectory()) // Adjust path if needed
-               .AddJsonFile("appsettings.json") // Read connection string from config
+               .AddJsonFile("infrastructureAppsettings.json") // Read connection string from config
                .Build();
 
         var optionsBuilder = new DbContextOptionsBuilder<EFDataContext>();

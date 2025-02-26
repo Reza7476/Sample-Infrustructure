@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Sample.Persistence.EF.Persistence;
+using Sample.Persistence.EF.DbContexts;
 
 #nullable disable
 
@@ -45,9 +45,23 @@ namespace Sample.Persistence.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("BaseEntity", (string)null);
+                    b.ToTable("BaseEntity");
 
                     b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("Sample.Core.Entities.Employees.Employee", b =>
+                {
+                    b.HasBaseType("Sample.Core.Entities.Generals.BaseEntity");
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("Employees", (string)null);
                 });
 
             modelBuilder.Entity("Sample.Core.Entities.Users.User", b =>
@@ -63,6 +77,15 @@ namespace Sample.Persistence.EF.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Sample.Core.Entities.Employees.Employee", b =>
+                {
+                    b.HasOne("Sample.Core.Entities.Generals.BaseEntity", null)
+                        .WithOne()
+                        .HasForeignKey("Sample.Core.Entities.Employees.Employee", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Sample.Core.Entities.Users.User", b =>
