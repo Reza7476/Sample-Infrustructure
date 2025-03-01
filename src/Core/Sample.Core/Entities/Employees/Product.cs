@@ -2,9 +2,9 @@
 
 namespace Sample.Core.Entities.Employees;
 
-public class Employee : BaseEntity
+public class Product : BaseEntity
 {
-    public int Age { get; set; }
-    
     public required string Name { get; set; }
+    public required int Age { get; set; }
+    
 }

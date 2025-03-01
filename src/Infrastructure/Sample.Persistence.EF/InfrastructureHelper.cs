@@ -13,8 +13,6 @@ public class InfrastructureHelper
         
         parentDir=parentDir.Parent;
         
-        //string solutionDir = Directory.GetParent(Directory.GetCurrentDirectory())!.FullName;
-        
         string infrastructureProjectName = "Infrastructure\\Sample.Persistence.EF";
         
         var infrastructureDirectory = parentDir + "\\" + infrastructureProjectName;

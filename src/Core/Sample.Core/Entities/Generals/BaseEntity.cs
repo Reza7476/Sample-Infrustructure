@@ -1,10 +1,12 @@
-﻿namespace Sample.Core.Entities.Generals;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Sample.Core.Entities.Generals;
 
 public class BaseEntity
 {
-    public int Id { get; set; }
-    public long CreatedAt { get; set; } //= DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    public long Id { get; set; }
+    public long CreatedAt { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+    public long? CreatedBy { get; set; }
     public long? UpdatedAt { get; set; }
-    public string? CreatedBy { get; set; }
-    public string? UpdatedBy { get; set; }
+    public long? UpdatedBy { get; set; }
 }
