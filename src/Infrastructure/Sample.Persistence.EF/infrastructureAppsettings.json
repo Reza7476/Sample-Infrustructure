@@ -1,16 +1,11 @@
 {
-
   "DatabaseType": "SqlServerDevelopment",
 
   "ConnectionStrings": {
-
-    "SqlServerTest": "Server=.;Database=Medis-Sample-Test;user id=sa;password=123@medis;Integrated Security=False;Encrypt=True;TrustServerCertificate=True;",
-
-    "SqlServerDevelopment": "Server=.;Database=Medis-Sample-Dev;user id=sa;password=123@medis;Integrated Security=False;Encrypt=True;TrustServerCertificate=True;",
-
-    "SqlServerProduction": "Server=.;Database=Medis-Sample-Production;user id=sa;password=123@medis;Integrated Security=False;Encrypt=True;TrustServerCertificate=True;"
-
+   // "SqlServerDevelopment": "Server=.;Database=Medis-Sample;User Id=sa;Password=123@medis;Integrated Security=False;Encrypt=True;TrustServerCertificate=True;"
+   "SqlServerDevelopment": "Server=.;Database=Medis-Sample-Test;User Id=sa;Password=123@medis;Integrated Security=False;Encrypt=True;TrustServerCertificate=True;"
   },
+
   "Logging": {
     "LogLevel": {
       "Default": "Information",

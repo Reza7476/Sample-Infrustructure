@@ -1,9 +1,9 @@
 ﻿using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using Sample.Application.Users;
 using Sample.Commons.Interfaces;
 using Sample.Persistence.EF.DbContexts;
+using Sample.Persistence.EF.EntitiesConfig.User;
 using Sample.Persistence.EF.Repositories.Users;
 
 namespace Sample.RestApi.Configs.Services;

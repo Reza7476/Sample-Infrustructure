@@ -11,7 +11,8 @@ public class UserBuilder
         _user = new User()
         {
             Email = "email",
-            Name = "namme"
+            Name = "namme",
+            
         };
     }
 

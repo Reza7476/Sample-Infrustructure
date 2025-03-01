@@ -4,7 +4,7 @@ namespace Sample.Core.Entities.Users;
 
 public class User : BaseEntity
 {
-    public string Name { get; set; } = default!;
-    public string Email { get; set; } = default!;
+    public required string Name { get; set; } 
+    public required string Email { get; set; } 
 }
 

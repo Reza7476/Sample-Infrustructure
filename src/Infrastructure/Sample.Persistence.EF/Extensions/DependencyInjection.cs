@@ -11,7 +11,12 @@ public static class DependencyInjection
     public static IServiceCollection SetDBContext(this IServiceCollection services, IConfiguration configuration)
     {
         string? databaseType = configuration.GetValue<string>("DatabaseType");
-        string? connectionString = configuration.GetConnectionString(databaseType ?? "Undeclared");
+
+        if (string.IsNullOrWhiteSpace(databaseType)) 
+        {
+            throw new InvalidOperationException("appSetting.json error");
+        }
+        string? connectionString = configuration.GetConnectionString("SqlServerDevelopment");
 
         switch (databaseType)
         {
@@ -30,6 +35,10 @@ public static class DependencyInjection
                     // Configure DbContext using IConfiguration
                     options.UseSqlServer(connectionString,
                         builder => builder.MigrationsAssembly(typeof(EFDataContext).Assembly.FullName));
+
+
+
+
                 });
 
                 break;

@@ -1,4 +1,4 @@
-using Sample.Persistence.EF;
+﻿using Sample.Persistence.EF;
 using Sample.RestApi;
 using Sample.RestApi.Configs.Cors;
 using Sample.RestApi.Configs.Services;
@@ -31,9 +31,10 @@ else
 {
     infrastructureDirectory = Directory.GetCurrentDirectory();
 }
+
 var settings = builder.Configuration
     .SetBasePath(infrastructureDirectory!)
-    .AddJsonFile("infrastructureAppsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile("infrastructureAppSettings.json", optional: false, reloadOnChange: true)
     .Build();
 
 builder.Services.AddInfrastructureServices(settings);
@@ -56,3 +57,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
