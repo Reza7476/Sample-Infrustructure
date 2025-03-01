@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Sample.Commons.Interfaces;
 using Sample.Persistence.EF.DbContexts;
+using Sample.Persistence.EF.Interceptors;
 
 namespace Sample.Persistence.EF.Extensions;
 
@@ -36,8 +38,8 @@ public static class DependencyInjection
                     options.UseSqlServer(connectionString,
                         builder => builder.MigrationsAssembly(typeof(EFDataContext).Assembly.FullName));
 
-
-
+                    var auditingInterceptor = new AuditingInterceptor(serviceProvider.GetRequiredService<ICurrentUserService>());
+                    options.AddInterceptors(auditingInterceptor);   
 
                 });
 

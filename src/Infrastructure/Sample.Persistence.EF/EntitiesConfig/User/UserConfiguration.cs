@@ -7,7 +7,7 @@ public class UserConfiguration : IEntityTypeConfiguration<Sample.Core.Entities.U
 {
     public void Configure(EntityTypeBuilder<Core.Entities.Users.User> builder)
     {
-        builder.Property(_ => _.Name);
+        builder.Property(_ => _.FirstName);
         builder.Property(_ => _.Email);
     }
 }

@@ -4,7 +4,7 @@ using Sample.Application.Users;
 using Sample.Commons.Interfaces;
 using Sample.Persistence.EF.DbContexts;
 using Sample.Persistence.EF.EntitiesConfig.User;
-using Sample.Persistence.EF.Repositories.Users;
+using Sample.RestApi.Configs.Cors;
 
 namespace Sample.RestApi.Configs.Services;
 
@@ -30,6 +30,7 @@ public class AutofactModule : Module
         var serviceAssembely = typeof(UserAppService).Assembly;
         var persistenceAssembley = typeof(EFUnitOfWork).Assembly;
         var repositoryAssembley = typeof(EFUserRepository).Assembly;
+        var restService=typeof(CorsConfiguration).Assembly;
 
         container.RegisterAssemblyTypes(persistenceAssembley)
          .AssignableTo<IScope>()
@@ -47,6 +48,16 @@ public class AutofactModule : Module
          .AsImplementedInterfaces()
          .InstancePerLifetimeScope();
         //.InstancePerDependency();===>AddTransient()
+
+        container.RegisterAssemblyTypes(restService)
+         .AssignableTo<IScope>()
+         .AsImplementedInterfaces()
+         .InstancePerLifetimeScope();//==>add scoped
+
+        container.RegisterAssemblyTypes(persistenceAssembley)
+        .AssignableTo<ITransient>()
+        .AsImplementedInterfaces()
+        .InstancePerDependency();//===>AddTransient()
 
         container.Register(ctx =>
         {

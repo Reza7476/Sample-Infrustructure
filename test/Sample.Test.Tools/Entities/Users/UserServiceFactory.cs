@@ -1,7 +1,7 @@
 ﻿using Sample.Application.Users;
 using Sample.Application.Users.Services;
 using Sample.Persistence.EF.DbContexts;
-using Sample.Persistence.EF.Repositories.Users;
+using Sample.Persistence.EF.EntitiesConfig.User;
 
 namespace Sample.Test.Tools.Entities.Users;
 
