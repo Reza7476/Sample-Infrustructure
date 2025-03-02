@@ -1,4 +1,5 @@
-﻿using Sample.Application.Users.Dtos;
+﻿using Sample.Application.Medias.Dtos;
+using Sample.Application.Users.Dtos;
 using Sample.Application.Users.Exceptions;
 using Sample.Application.Users.Services;
 using Sample.Commons.Interfaces;
@@ -37,6 +38,25 @@ public class UserAppService : IUserService
         await _unitOfWork.Complete();
 
         return user.Id;
+    }
+
+    public async Task AddProfileImage(AddMediaDto dto, long id)
+    {
+        var user = await _repository.GetUserAndMediaById(id);
+        if (!user.Medias.Any())
+        {
+            user.Medias.
+        }
+
+
+
+
+
+    }
+
+    public Task<int> CreateAsync(UserInfoResponseDto userModel)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null)

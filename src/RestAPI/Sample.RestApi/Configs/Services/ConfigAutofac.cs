@@ -3,8 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 using Sample.Application.Users;
 using Sample.Commons.Interfaces;
 using Sample.Persistence.EF.DbContexts;
-using Sample.Persistence.EF.EntitiesConfig.User;
-using Sample.RestApi.Configs.Cors;
 
 namespace Sample.RestApi.Configs.Services;
 
@@ -15,50 +13,43 @@ public static class ConfigAutofac
         builder.UseServiceProviderFactory(new AutofacServiceProviderFactory());
         builder.ConfigureContainer<ContainerBuilder>(builder =>
         {
-            builder.RegisterModule(new AutofactModule());
-
+            builder.RegisterModule(new AutoFacModule());
         });
 
         return builder;
     }
 }
 
-public class AutofactModule : Module
+public class AutoFacModule : Module
 {
     protected override void Load(ContainerBuilder container)
     {
-        var serviceAssembely = typeof(UserAppService).Assembly;
-        var persistenceAssembley = typeof(EFUnitOfWork).Assembly;
-        var repositoryAssembley = typeof(EFUserRepository).Assembly;
-        var restService=typeof(CorsConfiguration).Assembly;
+        var serviceAssembly = typeof(UserAppService).Assembly;
+        var persistenceAssembly = typeof(EFUnitOfWork).Assembly;
+        var restApiAssembly = typeof(AutoFacModule).Assembly;
 
-        container.RegisterAssemblyTypes(persistenceAssembley)
-         .AssignableTo<IScope>()
+        // ثبت تمامی انواعی که از IScope ارث می‌برند
+        container.RegisterAssemblyTypes(
+            persistenceAssembly,
+            serviceAssembly,
+            restApiAssembly)
+         .Where(t => typeof(IScope).IsAssignableFrom(t))  // اضافه کردن شرط برای ارث‌بری از IScope
          .AsImplementedInterfaces()
-         .InstancePerLifetimeScope();//==>add scoped
+         .InstancePerLifetimeScope();  // Scoped
 
-        container.RegisterAssemblyTypes(persistenceAssembley)
+        // ثبت IRepository‌ها با زمان‌زندگی Scoped
+        container.RegisterAssemblyTypes(persistenceAssembly)
          .AssignableTo<IRepository>()
          .AsImplementedInterfaces()
          .InstancePerLifetimeScope();
-        //.SingleInstance(); ===>AddSingleton()
 
-        container.RegisterAssemblyTypes(serviceAssembely)
+        // ثبت IService‌ها با زمان‌زندگی Scoped
+        container.RegisterAssemblyTypes(serviceAssembly)
          .AssignableTo<IService>()
          .AsImplementedInterfaces()
          .InstancePerLifetimeScope();
-        //.InstancePerDependency();===>AddTransient()
 
-        container.RegisterAssemblyTypes(restService)
-         .AssignableTo<IScope>()
-         .AsImplementedInterfaces()
-         .InstancePerLifetimeScope();//==>add scoped
-
-        container.RegisterAssemblyTypes(persistenceAssembley)
-        .AssignableTo<ITransient>()
-        .AsImplementedInterfaces()
-        .InstancePerDependency();//===>AddTransient()
-
+        // ثبت HttpClient با زمان‌زندگی Scoped
         container.Register(ctx =>
         {
             var clientFactory = ctx.Resolve<IHttpClientFactory>();

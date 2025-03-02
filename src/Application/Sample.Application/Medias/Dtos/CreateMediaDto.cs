@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Sample.Core.Entities.Media;
+using Sample.Core.Entities.Medias;
 
 namespace Sample.Application.Medias.Dtos;
 

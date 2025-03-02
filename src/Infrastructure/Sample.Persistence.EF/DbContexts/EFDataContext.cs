@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sample.Core.Entities.Employees;
 using Sample.Core.Entities.Generals;
-using Sample.Core.Entities.Media;
+using Sample.Core.Entities.Medias;
 using Sample.Core.Entities.Users;
 using Sample.Persistence.EF.EntitiesConfig;
 

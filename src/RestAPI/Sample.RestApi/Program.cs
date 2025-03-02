@@ -1,6 +1,7 @@
 ﻿using Sample.Persistence.EF;
 using Sample.RestApi;
 using Sample.RestApi.Configs.Cors;
+using Sample.RestApi.Configs.Middleware;
 using Sample.RestApi.Configs.Services;
 using Sample.RestApi.Configs.Swagger;
 
@@ -48,11 +49,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseMiddleware<CheckUserInfo>();
 
 app.MapControllers();
 
