@@ -1,6 +1,6 @@
 ﻿using Sample.Application.Medias.Dtos;
 using Sample.Commons.Interfaces;
-using Sample.Core.Entities.Media;
+using Sample.Core.Entities.Medias;
 
 namespace Sample.Application.Medias.Services;
 

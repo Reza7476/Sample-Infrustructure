@@ -1,7 +1,9 @@
 ﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Sample.Application.Users.Exceptions;
 using Sample.Application.Users.Services;
 using Sample.Core.Entities.Users;
+using Sample.Test.Tools.Entities.Medias;
 using Sample.Test.Tools.Entities.Users;
 using Sample.Test.Tools.Infrastructure.DataBaseConfig.Unit;
 
@@ -38,13 +40,33 @@ public class UserServiceTests : BusinessUnitTest
             .WithMobile("+989174367476")
             .Build();
         Save(user);
-        var dto=new AddUserDtoBuilder()
+        var dto = new AddUserDtoBuilder()
             .WithMobile("+989174367476")
             .Build();
 
-        Func<Task> expected=async()=>await _sut.Add(dto);
+        Func<Task> expected = async () => await _sut.Add(dto);
 
-        await expected.Should().ThrowAsync < MobilIsDuplicateException>();
+        await expected.Should().ThrowAsync<MobilIsDuplicateException>();
+    }
+
+
+    [Fact]
+    public async Task AddProfileImage_should_add_user_profile_image_properly()
+    {
+        var user = new UserBuilder()
+            .WithMobile("9174367476")
+            .Build();
+        Save(user);
+        var dto = new AddMediaDtoBuilder()
+            .WithFile()
+            .Build();
+        await _sut.AddProfileImage(dto, user.Id);
+
+        var expected = ReadContext.Set<User>().Include(_ => _.Medias).First();
+        expected.Medias.First().Extension.Should().Bto.
+
+
+
     }
 
 }

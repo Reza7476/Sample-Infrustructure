@@ -2,7 +2,7 @@
 using Sample.Application.Medias.Dtos;
 using Sample.Application.Medias.Exceptions;
 using Sample.Application.Medias.Services;
-using Sample.Core.Entities.Media;
+using Sample.Core.Entities.Medias;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
 using SixLabors.ImageSharp.PixelFormats;

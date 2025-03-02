@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Sample.Application.Users.Dtos;
 using Sample.Application.Users.Services;
 using Sample.Commons.Interfaces;
@@ -6,6 +7,7 @@ using Sample.Commons.Interfaces;
 namespace Sample.RestApi.Controllers.Users;
 [Route("api/users")]
 [ApiController]
+//[Authorize]
 public class UsersController : ControllerBase
 {
     private readonly IUserService _service;
@@ -16,15 +18,15 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost]
-    public async Task <long> Add(AddUserDto dto)
+    public async Task<long> Add(AddUserDto dto)
     {
         return await _service.Add(dto);
     }
-    
+
     [HttpGet("all")]
-    public Task <IPageResult<GetAllUsersDto>> GetAllUsers()
+    public Task<IPageResult<GetAllUsersDto>> GetAllUsers()
     {
         return _service.GetAllUsers();
     }
-   
+
 }
