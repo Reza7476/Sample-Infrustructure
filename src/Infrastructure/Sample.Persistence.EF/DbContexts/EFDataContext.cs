@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sample.Core.Entities.Employees;
 using Sample.Core.Entities.Generals;
+using Sample.Core.Entities.Media;
 using Sample.Core.Entities.Users;
 using Sample.Persistence.EF.EntitiesConfig;
 
@@ -15,6 +16,7 @@ public class EFDataContext : DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Product> Products { get; set; }
+    public DbSet<Media> Medias { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

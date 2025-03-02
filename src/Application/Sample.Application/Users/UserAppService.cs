@@ -1,4 +1,5 @@
 ﻿using Sample.Application.Users.Dtos;
+using Sample.Application.Users.Exceptions;
 using Sample.Application.Users.Services;
 using Sample.Commons.Interfaces;
 using Sample.Commons.UnitOfWork;
@@ -21,11 +22,15 @@ public class UserAppService : IUserService
 
     public async Task<long> Add(AddUserDto dto)
     {
+        await StopIfMobileIsDuplicate(dto);
+
         var user = new User
         {
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
             Email = dto.Email,
-            Name = dto.Name,
-            CreatedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds()
+            Mobile = dto.Mobile,
+
         };
 
         await _repository.Add(user);
@@ -37,5 +42,13 @@ public class UserAppService : IUserService
     public async Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null)
     {
         return await _repository.GetAllUsers(pagination);
+    }
+
+    private async Task StopIfMobileIsDuplicate(AddUserDto dto)
+    {
+        if (await _repository.IsExistByMobile(dto.Mobile))
+        {
+            throw new MobilIsDuplicateException();
+        }
     }
 }

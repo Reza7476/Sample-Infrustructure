@@ -11,8 +11,8 @@ using Sample.Persistence.EF.DbContexts;
 namespace Sample.Persistence.EF.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    [Migration("20250226135000_ModifyBaseClass")]
-    partial class ModifyBaseClass
+    [Migration("20250301134213_SetMediaTable")]
+    partial class SetMediaTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -58,6 +58,67 @@ namespace Sample.Persistence.EF.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("Sample.Core.Entities.Media.Media", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("AltText")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("CreatedAt")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("CreatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Extension")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Hash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SortingOrder")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("TargetType")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("ThumbnailUniqueName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte>("Type")
+                        .HasColumnType("tinyint");
+
+                    b.Property<string>("URL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UniqueName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("UpdatedAt")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasMaxLength(36)
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Medias");
+                });
+
             modelBuilder.Entity("Sample.Core.Entities.Users.User", b =>
                 {
                     b.Property<long>("Id")
@@ -77,8 +138,25 @@ namespace Sample.Persistence.EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FirstName")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Mobile")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NationalCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfileUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("UpdatedAt")

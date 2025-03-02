@@ -8,4 +8,5 @@ public interface IUserRepository : IRepository
 {
     Task Add(User user);
     Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination=null);
+    Task<bool> IsExistByMobile(string mobile);
 }

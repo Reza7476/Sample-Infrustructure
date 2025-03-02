@@ -7,19 +7,19 @@ using Sample.Persistence.EF.DbContexts;
 using Sample.Persistence.EF.Extensions.Paginations;
 
 
-namespace Sample.Persistence.EF.Repositories.Users;
+namespace Sample.Persistence.EF.EntitiesConfig.User;
 
 public class EFUserRepository : IUserRepository
 {
 
-    private readonly DbSet<User> _users;
+    private readonly DbSet< Sample.Core.Entities.Users.User> _users;
 
     public EFUserRepository(EFDataContext context)
     {
-        _users = context.Set<User>();
+        _users = context.Set<Sample.Core.Entities.Users.User>();
     }
 
-    public async Task Add(User user)
+    public async Task Add(Sample.Core.Entities.Users.User user)
     {
         await _users.AddAsync(user);
     }
@@ -30,10 +30,15 @@ public class EFUserRepository : IUserRepository
         {
             Email = _.Email,
             Id = _.Id,
-            Name = _.Name,
+            Name = _.FirstName,
         }).AsQueryable();
 
 
         return await query.Paginate(pagination ?? new Pagination());
+    }
+
+    public async Task<bool> IsExistByMobile(string mobile)
+    {
+        return await _users.AnyAsync(_ => _.Mobile == mobile);
     }
 }

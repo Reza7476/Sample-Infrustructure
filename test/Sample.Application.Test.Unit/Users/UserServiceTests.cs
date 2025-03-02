@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Sample.Application.Users.Exceptions;
 using Sample.Application.Users.Services;
 using Sample.Core.Entities.Users;
 using Sample.Test.Tools.Entities.Users;
@@ -19,30 +20,31 @@ public class UserServiceTests : BusinessUnitTest
     public async Task Add_should_add_user_properly()
     {
         var dto = new AddUserDtoBuilder()
-            .WithName("Reza")
+            .WithFirstName("Reza")
             .WithEmail("Email")
             .Build();
 
         await _sut.Add(dto);
 
         var expected = ReadContext.Set<User>().First();
-        expected.Name.Should().Be(dto.Name);
+        expected.FirstName.Should().Be(dto.FirstName);
         expected.Email.Should().Be(dto.Email);
     }
 
     [Fact]
-    public async Task GetAllUsers_should_return_all_user_properly()
+    public async Task Add_should_throw_exception_when_moblile_is_duplicat()
     {
         var user = new UserBuilder()
-            .WithEmail("email")
-            .WithName("name")
+            .WithMobile("+989174367476")
             .Build();
         Save(user);
-        
-        var expected = await _sut.GetAllUsers();
-        
-        expected.Elements.First().Email.Should().Be(user.Email); 
-        expected.Elements.First().Name.Should().Be(user.Name);   
-        expected.Elements.First().Id.Should().Be(user.Id);
+        var dto=new AddUserDtoBuilder()
+            .WithMobile("+989174367476")
+            .Build();
+
+        Func<Task> expected=async()=>await _sut.Add(dto);
+
+        await expected.Should().ThrowAsync < MobilIsDuplicateException>();
     }
+
 }

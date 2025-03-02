@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Sample.Application.Users.Services;
-using Sample.Core.Entities.Users;
 using Sample.Test.Tools.Entities.Users;
 using Sample.Test.Tools.Infrastructure.DataBaseConfig.Integration;
 
@@ -16,17 +15,18 @@ public class UserServiceTests : BusinessIntegrationTest
     }
 
     [Fact]
-    public async Task Add_should_add_user_properly()
+    public async Task GetAllUsers_should_return_all_user_properly()
     {
-        var dto = new AddUserDtoBuilder()
-            .WithName("Name")
-            .WithEmail("Email")
+        var user = new UserBuilder()
+            .WithEmail("email")
+            .WithFirstName("name")
             .Build();
+        Save(user);
 
-        await _sut.Add(dto);
+        var expected = await _sut.GetAllUsers();
 
-        var expected = ReadContext.Set<User>().First();
-        expected.Name.Should().Be(dto.Name);
-        expected.Email.Should().Be(dto.Email);
+        expected.Elements.First().Email.Should().Be(user.Email);
+        expected.Elements.First().Name.Should().Be(user.FirstName);
+        expected.Elements.First().Id.Should().Be(user.Id);
     }
 }
