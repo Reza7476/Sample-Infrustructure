@@ -39,8 +39,12 @@ public class EFUserRepository : IUserRepository
 
     public async Task<User?> GetUserAndMediaById(long id)
     {
-        return await _users.Where(_ => _.Id == id).Include(_ => _.Medias).FirstOrDefaultAsync();
+        return await _users
+            .Where(_ => _.Id == id)
+            .Include(_ => _.Medias)
+            .FirstOrDefaultAsync();
     }
+
 
     public Task<int?> GetUserIdByMacId(string mac_Id)
     {

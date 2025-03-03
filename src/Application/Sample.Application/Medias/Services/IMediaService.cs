@@ -4,8 +4,8 @@ using Sample.Core.Entities.Medias;
 
 namespace Sample.Application.Medias.Services;
 
-public interface IMediaService : ITransient
+public interface IMediaService : IScope
 {
     Task<Media> CreateMediaModelFromFile(CreateMediaDto dto);
-
+    Task SaveFileInHostFromBase64(Media media);
 }

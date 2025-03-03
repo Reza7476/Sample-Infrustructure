@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
 using Sample.Application.Medias.Dtos;
 using Sample.Application.Medias.Exceptions;
 using Sample.Application.Medias.Services;
@@ -15,6 +16,8 @@ namespace Sample.Application.Medias;
 
 public class MediaAppService : IMediaService
 {
+    private readonly IWebHostEnvironment _webHostEnvironment;
+
     private static readonly Dictionary<MediaType, HashSet<string>> _validExtensions = new()
 
         {
@@ -25,6 +28,10 @@ public class MediaAppService : IMediaService
         { MediaType.Word, new() { ".docm", ".docx", ".doc", ".dot" } }
     };
 
+    public MediaAppService(IWebHostEnvironment webHostEnvironment)
+    {
+        _webHostEnvironment = webHostEnvironment;
+    }
 
     public async Task<Media> CreateMediaModelFromFile(CreateMediaDto dto)
     {
@@ -217,4 +224,68 @@ public class MediaAppService : IMediaService
             return Media;
         }
     }
+
+    public async Task SaveFileInHostFromBase64(Media media)
+    {
+        if (string.IsNullOrWhiteSpace(media.Main_Base64))
+            throw new ArgumentNullException(media.Main_Base64);
+
+        try
+        {
+            string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath + media.URL);
+            //Check if directory exist
+            if (!Directory.Exists(uploadsFolder))
+            {
+                //Create directory if it doesn't exist
+                Directory.CreateDirectory(uploadsFolder);
+            }
+
+            // Save Main Image
+            var savePath = Path.Combine(uploadsFolder, media.UniqueName + media.Extension);
+            if (media.Extension.ToLower() == ".webp")
+            {
+                // This is Image File and want to Convert to Webp
+                await SaveImageAsWebP(base64Image: media.Main_Base64, savePath: savePath);
+            }
+            else
+            {
+                // For All Other Files
+                await SaveFile(fileBase64: media.Main_Base64, savePath: savePath);
+            }
+
+            if (!string.IsNullOrWhiteSpace(media.Thumb_Base64))
+            {
+                savePath = Path.Combine(uploadsFolder, media.ThumbnailUniqueName + media.Extension);
+                await SaveFile(fileBase64: media.Thumb_Base64, savePath: savePath);
+            }
+
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+    private async Task SaveImageAsWebP(string base64Image, string savePath)
+    {
+        var imageBytes = Convert.FromBase64String(base64Image);
+        using (var ms = new MemoryStream(imageBytes))
+        {
+            using (var image = await Image.LoadAsync<Rgba32>(ms))
+            {
+                using (var stream = new FileStream(savePath, FileMode.Create))
+                {
+                    await image.SaveAsWebpAsync(stream, new WebpEncoder { Quality = 80 });
+                }
+            }
+        }
+    }
+
+    private async Task SaveFile(string fileBase64, string savePath)
+    {
+        byte[] fileBytes = Convert.FromBase64String(fileBase64);
+
+        await File.WriteAllBytesAsync(savePath, fileBytes);
+    }
+
+
 }

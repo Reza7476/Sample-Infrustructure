@@ -1,5 +1,5 @@
 ﻿namespace Sample.Commons.Exceptions;
 
-public class CusomException:Exception
+public class CustomException : Exception
 {
 }

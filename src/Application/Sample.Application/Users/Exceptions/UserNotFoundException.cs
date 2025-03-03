@@ -2,6 +2,6 @@
 
 namespace Sample.Application.Users.Exceptions;
 
-public class UserNotFoundException : CusomException
+public class UserNotFoundException : CustomException
 {
 }

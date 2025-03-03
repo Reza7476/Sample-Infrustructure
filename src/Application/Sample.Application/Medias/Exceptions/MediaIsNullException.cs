@@ -2,6 +2,6 @@
 
 namespace Sample.Application.Medias.Exceptions;
 
-public class MediaIsNullException : CusomException
+public class MediaIsNullException : CustomException
 {
 }
