@@ -22,40 +22,25 @@ public class UserAppService : IUserService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<long> Add(AddUserDto dto)
+    public async Task<long> CreateAsync(UserInfoResponseDto dto)
     {
-        await StopIfMobileIsDuplicate(dto);
-
-        var user = new User
+        var user = new User()
         {
-            FirstName = dto.FirstName,
-            LastName = dto.LastName,
             Email = dto.Email,
-            Mobile = dto.Mobile,
-
+            FirstName = dto.Name,
+            LastName = dto.Family,
+            MacId = dto.Sub,
+            Mobile = dto.PhoneNumber,
+            Gender = Gender.NotSet,
         };
-
-        await _repository.Add(user);
+        await _repository.AddAsync(user);
         await _unitOfWork.Complete();
-
         return user.Id;
-    }
-
-    public Task<int> CreateAsync(UserInfoResponseDto userModel)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null)
     {
         return await _repository.GetAllUsers(pagination);
     }
-
-    private async Task StopIfMobileIsDuplicate(AddUserDto dto)
-    {
-        if (await _repository.IsExistByMobile(dto.Mobile))
-        {
-            throw new MobilIsDuplicateException();
-        }
-    }
+   
 }

@@ -6,7 +6,6 @@ namespace Sample.Application.Users.Services;
 
 public interface IUserService : IService
 {
-    Task<long> Add(AddUserDto dto);
-    Task<int> CreateAsync(UserInfoResponseDto userModel);
+    Task<long> CreateAsync(UserInfoResponseDto dto);
     Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null);
 }
