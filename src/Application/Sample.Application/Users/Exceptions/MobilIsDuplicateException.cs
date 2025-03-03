@@ -2,6 +2,6 @@
 
 namespace Sample.Application.Users.Exceptions;
 
-public class MobilIsDuplicateException : CusomException
+public class MobilIsDuplicateException : CustomException
 {
 }

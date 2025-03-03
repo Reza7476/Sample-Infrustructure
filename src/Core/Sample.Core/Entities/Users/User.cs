@@ -20,6 +20,17 @@ public class User : BaseEntity
     public string? NationalCode { get; set; }
     public HashSet<Media> Medias { get; set; }
 
+
+    public User AddMedia(Media media)
+    {
+        media.UserId = this.Id;
+        return this;
+    }
+
+    public string GetFullName()
+    {
+        return this.FirstName + " " + this.LastName;
+    }
 }
 
 public enum Gender

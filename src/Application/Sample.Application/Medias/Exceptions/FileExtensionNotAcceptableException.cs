@@ -2,6 +2,6 @@
 
 namespace Sample.Application.Medias.Exceptions;
 
-public class FileExtensionNotAcceptableException : CusomException
+public class FileExtensionNotAcceptableException : CustomException
 {
 }

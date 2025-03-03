@@ -34,7 +34,7 @@ public class UserServiceTests : BusinessUnitTest
     }
 
     [Fact]
-    public async Task Add_should_throw_exception_when_moblile_is_duplicat()
+    public async Task Add_should_throw_exception_when_mobile_is_duplicate()
     {
         var user = new UserBuilder()
             .WithMobile("+989174367476")
@@ -48,25 +48,4 @@ public class UserServiceTests : BusinessUnitTest
 
         await expected.Should().ThrowAsync<MobilIsDuplicateException>();
     }
-
-
-    [Fact]
-    public async Task AddProfileImage_should_add_user_profile_image_properly()
-    {
-        var user = new UserBuilder()
-            .WithMobile("9174367476")
-            .Build();
-        Save(user);
-        var dto = new AddMediaDtoBuilder()
-            .WithFile()
-            .Build();
-        await _sut.AddProfileImage(dto, user.Id);
-
-        var expected = ReadContext.Set<User>().Include(_ => _.Medias).First();
-        expected.Medias.First().Extension.Should().Bto.
-
-
-
-    }
-
 }

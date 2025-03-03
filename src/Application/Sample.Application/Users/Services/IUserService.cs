@@ -7,7 +7,6 @@ namespace Sample.Application.Users.Services;
 public interface IUserService : IService
 {
     Task<long> Add(AddUserDto dto);
-    Task AddProfileImage(AddMediaDto dto, long id);
     Task<int> CreateAsync(UserInfoResponseDto userModel);
     Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null);
 }
