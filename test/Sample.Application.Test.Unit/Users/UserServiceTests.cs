@@ -1,9 +1,5 @@
 ﻿using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Sample.Application.Users.Exceptions;
 using Sample.Application.Users.Services;
-using Sample.Core.Entities.Users;
-using Sample.Test.Tools.Entities.Medias;
 using Sample.Test.Tools.Entities.Users;
 using Sample.Test.Tools.Infrastructure.DataBaseConfig.Unit;
 
@@ -19,33 +15,21 @@ public class UserServiceTests : BusinessUnitTest
     }
 
     [Fact]
-    public async Task Add_should_add_user_properly()
+    public  async Task CreateUser_should_create_user_properly()
     {
-        var dto = new AddUserDtoBuilder()
-            .WithFirstName("Reza")
-            .WithEmail("Email")
-            .Build();
-
-        await _sut.Add(dto);
-
-        var expected = ReadContext.Set<User>().First();
-        expected.FirstName.Should().Be(dto.FirstName);
-        expected.Email.Should().Be(dto.Email);
-    }
-
-    [Fact]
-    public async Task Add_should_throw_exception_when_mobile_is_duplicate()
-    {
-        var user = new UserBuilder()
+        var dto = new UserInfoResponseDtoBuilder()
+            .WithSub("sub")
             .WithMobile("+989174367476")
+            .WithLastName("reza")
+            .WithName("Dehghani")
             .Build();
-        Save(user);
-        var dto = new AddUserDtoBuilder()
-            .WithMobile("+989174367476")
-            .Build();
+        await _sut.CreateAsync(dto);
 
-        Func<Task> expected = async () => await _sut.Add(dto);
+        var expected = ReadContext.Users.FirstOrDefault();
+        expected!.FirstName.Should().Be(dto.Name);
+        expected.LastName.Should().Be(dto.Family);
+        expected.Mobile.Should().Be(dto.PhoneNumber);
+        expected.MacId.Should().Be(dto.Sub);
 
-        await expected.Should().ThrowAsync<MobilIsDuplicateException>();
     }
 }

@@ -9,19 +9,13 @@ using Sample.Persistence.EF.Extensions.Paginations;
 
 namespace Sample.Persistence.EF.EntitiesConfig.Users;
 
-public class EFUserRepository : IUserRepository
+public class EFUserRepository : BaseRepository<User>, IUserRepository
 {
 
     private readonly DbSet<User> _users;
-
-    public EFUserRepository(EFDataContext context)
+    public EFUserRepository(EFDataContext context) : base(context)
     {
         _users = context.Set<User>();
-    }
-
-    public async Task Add(User user)
-    {
-        await _users.AddAsync(user);
     }
 
     public async Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null)
@@ -46,9 +40,12 @@ public class EFUserRepository : IUserRepository
     }
 
 
-    public Task<int?> GetUserIdByMacId(string mac_Id)
+    public async Task<long?> GetUserIdByMacId(string mac_Id)
     {
-        throw new NotImplementedException();
+        return await _users
+            .Where(_ => _.MacId == mac_Id)
+            .Select(_ => _.Id)
+            .FirstOrDefaultAsync();
     }
 
     public async Task<bool> IsExistByMobile(string mobile)

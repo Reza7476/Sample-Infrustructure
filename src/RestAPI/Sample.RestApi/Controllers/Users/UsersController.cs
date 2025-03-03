@@ -24,22 +24,14 @@ public class UsersController : ControllerBase
         _userToken = userToken;
         _userHandlerService = userHandlerService;
     }
-
-    [HttpPost]
-    public async Task<long> Add(AddUserDto dto)
-    {
-        return await _service.Add(dto);
-    }
-
+ 
     [HttpGet("all")]
     public Task<IPageResult<GetAllUsersDto>> GetAllUsers()
     {
         return _service.GetAllUsers();
     }
 
-
     [HttpPut("add-profile-image")]
-    //[Authorize]
     public async Task AddProfileImage([FromForm] AddMediaDto dto)
     {
         //var userId = _userToken.UserId;
