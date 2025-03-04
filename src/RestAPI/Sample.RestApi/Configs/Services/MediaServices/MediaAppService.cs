@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Sample.Application.Medias.Dtos;
 using Sample.Application.Medias.Exceptions;
 using Sample.Application.Medias.Services;
+using Sample.Commons.Interfaces;
 using Sample.Core.Entities.Medias;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Webp;
@@ -12,11 +13,13 @@ using System.Security.Cryptography;
 using System.Text;
 using Image = SixLabors.ImageSharp.Image;
 
-namespace Sample.Application.Medias;
+namespace Sample.RestApi.Configs.Services.MediaServices;
 
 public class MediaAppService : IMediaService
 {
     private readonly IWebHostEnvironment _webHostEnvironment;
+    private readonly IFileSystem _fileSystem;
+
 
     private static readonly Dictionary<MediaType, HashSet<string>> _validExtensions = new()
 
@@ -28,32 +31,33 @@ public class MediaAppService : IMediaService
         { MediaType.Word, new() { ".docm", ".docx", ".doc", ".dot" } }
     };
 
-    public MediaAppService(IWebHostEnvironment webHostEnvironment)
+    public MediaAppService(IWebHostEnvironment webHostEnvironment,
+        IFileSystem fileSystem)
     {
         _webHostEnvironment = webHostEnvironment;
+        _fileSystem = fileSystem;
     }
 
     public async Task<Media> CreateMediaModelFromFile(CreateMediaDto dto)
     {
-        if (dto.File == null)
-        {
-            throw new MediaIsNullException();
-        }
-        var FileSize = GetFileSizeFromFile(dto.File);
+        StopIfFileIsNull(dto);
+
+        var FileSize = GetFileSizeFromFile(dto.File!);
         StopIfSizeNotAcceptable(dto.Type, FileSize);
-        string extension = GetFileExtension(dto.File);
+
+        string extension = GetFileExtension(dto.File!);
         StopIfExtensionNotAcceptable(dto.Type, extension);
 
         if (dto.ConvertToWebp == true)
             extension = ".webp";
 
-        string base64 = GenerateBase64FromFile(dto.File);
+        string base64 = GenerateBase64FromFile(dto.File!);
         var MD5_Hash = GenerateMD5Hash(base64);
         string thumbnailBase64 = string.Empty;
         if (dto.CreateThumbnail == true)
-            thumbnailBase64 = await CreateThumbnail(dto.File, dto.ThumbnailWithSize);
+            thumbnailBase64 = await CreateThumbnail(dto.File!, dto.ThumbnailWithSize);
         if (string.IsNullOrWhiteSpace(dto.Title))
-            dto.Title = dto.File.FileName;
+            dto.Title = dto.File!.FileName;
 
         var mediaModel = CreateMedia(type: dto.Type,
                targetType: dto.TargetType,
@@ -65,6 +69,14 @@ public class MediaAppService : IMediaService
                thumbBase64: thumbnailBase64,
                altText: dto.AltText);
         return mediaModel;
+    }
+
+    private static void StopIfFileIsNull(CreateMediaDto dto)
+    {
+        if (dto.File == null)
+        {
+            throw new MediaIsNullException();
+        }
     }
 
     private static double GetFileSizeFromFile(IFormFile file)
@@ -219,7 +231,7 @@ public class MediaAppService : IMediaService
                 URL = CreateFileURL(type, targetType),
                 Main_Base64 = base64,
                 Thumb_Base64 = thumbBase64,
-                TargetType = targetType
+                TargetType = targetType,
             };
             return Media;
         }
@@ -234,10 +246,10 @@ public class MediaAppService : IMediaService
         {
             string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath + media.URL);
             //Check if directory exist
-            if (!Directory.Exists(uploadsFolder))
+            if (!_fileSystem.Exists(uploadsFolder))
             {
                 //Create directory if it doesn't exist
-                Directory.CreateDirectory(uploadsFolder);
+                _fileSystem.CreateDirectory(uploadsFolder);
             }
 
             // Save Main Image
@@ -284,8 +296,26 @@ public class MediaAppService : IMediaService
     {
         byte[] fileBytes = Convert.FromBase64String(fileBase64);
 
-        await File.WriteAllBytesAsync(savePath, fileBytes);
+        await _fileSystem.WriteAllBytesAsync(savePath, fileBytes);
     }
 
+    public async Task DeleteFileInHost(MediaType type, MediaTargetType targetType, string fileName)
+    {
+        var findUrl = CreateFileURL(type, targetType);
 
+        string directoryPath = Path.Combine(_webHostEnvironment.WebRootPath, findUrl.TrimStart('/'));
+
+        if (_fileSystem.Exists(directoryPath))
+        {
+            string[] files = _fileSystem.GetFiles(directoryPath);
+            if (files != null)
+            {
+                var matchingFiles = files.Where(file => Path.GetFileNameWithoutExtension(file).Contains(fileName)).ToList();
+                foreach (var file in matchingFiles)
+                {
+                    await Task.Run(() => File.Delete(file));
+                }
+            }
+        }
+    }
 }

@@ -15,7 +15,7 @@ public class UserServiceTests : BusinessUnitTest
     }
 
     [Fact]
-    public  async Task CreateUser_should_create_user_properly()
+    public async Task CreateUser_should_create_user_properly()
     {
         var dto = new UserInfoResponseDtoBuilder()
             .WithSub("sub")

@@ -21,10 +21,9 @@ public class User : BaseEntity
     public HashSet<Media> Medias { get; set; }
 
 
-    public User AddMedia(Media media)
+    public void AddMedia(Media media)
     {
         media.UserId = this.Id;
-        return this;
     }
 
     public string GetFullName()

@@ -1,10 +1,7 @@
-﻿using Sample.Application.Medias.Dtos;
-using Sample.Application.Users.Dtos;
-using Sample.Application.Users.Exceptions;
+﻿using Sample.Application.Users.Dtos;
 using Sample.Application.Users.Services;
 using Sample.Commons.Interfaces;
 using Sample.Commons.UnitOfWork;
-using Sample.Core.Entities.Medias;
 using Sample.Core.Entities.Users;
 
 namespace Sample.Application.Users;
@@ -42,5 +39,5 @@ public class UserAppService : IUserService
     {
         return await _repository.GetAllUsers(pagination);
     }
-   
+
 }
