@@ -31,11 +31,22 @@ public class UsersController : ControllerBase
         return _service.GetAllUsers();
     }
 
-    [HttpPut("add-profile-image")]
+    [HttpPost("add-profile-image")]
     public async Task AddProfileImage([FromForm] AddMediaDto dto)
     {
         //var userId = _userToken.UserId;
        var userId = 1;
         await _userHandlerService.AddProfileImage(dto, userId);
     }
+
+    [HttpPut("update-profile-image")]
+
+    public async Task UpdateProfileImage([FromForm ] AddMediaDto dto)
+    {
+        //var userId = _userToken.UserId;
+        var userId = 1;
+
+        await _userHandlerService.UpdateProfileImage(dto, userId);
+    }
+   
 }

@@ -4,30 +4,30 @@ namespace Sample.Persistence.EF.DbContexts;
 
 public class EFUnitOfWork : IUnitOfWork
 {
-    private readonly EFDataContext _dataContext;
+    private readonly EFDataContext _context;
     public EFUnitOfWork(EFDataContext dataContext)
     {
-        _dataContext = dataContext;
+        _context = dataContext;
     }
 
     public async Task Begin()
     {
-        await _dataContext.Database.BeginTransactionAsync();
+        await _context.Database.BeginTransactionAsync();
     }
 
     public async Task Commit()
     {
-        await _dataContext.SaveChangesAsync();
-        await _dataContext.Database.CommitTransactionAsync();
+        await _context.SaveChangesAsync();
+        await _context.Database.CommitTransactionAsync();
     }
 
     public async Task Complete()
     {
-        await _dataContext.SaveChangesAsync();
+        await _context.SaveChangesAsync();
     }
 
     public async Task RoleBack()
     {
-        await _dataContext.Database.RollbackTransactionAsync();
+        await _context.Database.RollbackTransactionAsync();
     }
 }

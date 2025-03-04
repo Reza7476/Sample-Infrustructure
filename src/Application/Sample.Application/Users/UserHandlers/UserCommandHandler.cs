@@ -1,5 +1,6 @@
 ﻿using Sample.Application.Medias.Dtos;
 using Sample.Application.Medias.Services;
+using Sample.Application.Users.Dtos;
 using Sample.Application.Users.Exceptions;
 using Sample.Application.Users.Services;
 using Sample.Commons.Exceptions;
@@ -13,7 +14,7 @@ public class UserCommandHandler : IUserHandler
 {
     private readonly IUserService _userService;
     private readonly IMediaService _mediaService;
-    private readonly IUserRepository _repository;
+    private readonly IUserRepository _userRepository;
     private readonly IMediaRepository _mediaRepository;
     private readonly IUnitOfWork _unitOfWork;
 
@@ -26,22 +27,19 @@ public class UserCommandHandler : IUserHandler
     {
         _mediaService = mediaService;
         _userService = userService;
-        _repository = repository;
+        _userRepository = repository;
         _mediaRepository = mediaRepository;
         _unitOfWork = unitOfWork;
     }
 
     public async Task AddProfileImage(AddMediaDto dto, long userId)
     {
-
         await _unitOfWork.Begin();
         try
         {
-            var user = await _repository.GetUserAndMediaById(userId);
-            StopIfUserNotFound(user);
+            var user = await _userRepository.GetUserAndMediaById(userId) ?? throw new UserNotFoundException(); 
 
-            if (!user!.Medias
-                .Any(_ => _.Type == MediaType.Image
+            if (!user.Medias.Any(_ => _.Type == MediaType.Image
                 && _.TargetType == MediaTargetType.UserProfile_Image))
             {
                 var mediaDto = new CreateMediaDto()
@@ -54,9 +52,9 @@ public class UserCommandHandler : IUserHandler
 
                 var image = await _mediaService.CreateMediaModelFromFile(mediaDto) ?? throw new ErrorInCreateImageException();
 
-                user.AddMedia(image);
                 await _mediaRepository.AddAsync(image);
-                await _unitOfWork.Complete();
+                 user.AddMedia(image);
+                await _unitOfWork.Commit();
 
                 await _mediaService.SaveFileInHostFromBase64(image);
             }
@@ -68,11 +66,39 @@ public class UserCommandHandler : IUserHandler
         }
     }
 
-    private static void StopIfUserNotFound(User? user)
+    public async Task UpdateProfileImage(AddMediaDto dto, int userId)
     {
-        if (user == null)
+        await _unitOfWork.Begin();
+        try
         {
-            throw new UserNotFoundException();
+            var user = await _userRepository.GetUserAndMediaById(userId)?? throw new UserNotFoundException();
+
+            if (user!.Medias.Any(_ => _.Type == MediaType.Image
+                && _.TargetType == MediaTargetType.UserProfile_Image))
+            {
+                var mediaDto = new CreateMediaDto()
+                {
+                    Type = MediaType.Image,
+                    TargetType = MediaTargetType.UserProfile_Image,
+                    File = dto.File,
+                    CreateThumbnail = true,
+                    Media = user.Medias.First(_ => _.Type == MediaType.Image && _.TargetType == MediaTargetType.UserProfile_Image)
+                };
+
+                var image = await _mediaService.CreateMediaModelFromFile(mediaDto);
+
+                _mediaRepository.Update(image);
+
+                await _mediaService.DeleteFileInHost(type: MediaType.Image, image.TargetType, image.UniqueName);
+                await _unitOfWork.Commit();
+                await _mediaService.SaveFileInHostFromBase64(image);
+            }
+        }
+        catch (Exception ex)
+        {
+            await _unitOfWork.RoleBack();
+            throw new Exception(ex.Message);
         }
     }
+   
 }

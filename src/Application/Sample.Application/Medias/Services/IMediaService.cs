@@ -7,5 +7,6 @@ namespace Sample.Application.Medias.Services;
 public interface IMediaService : IScope
 {
     Task<Media> CreateMediaModelFromFile(CreateMediaDto dto);
+    Task DeleteFileInHost(MediaType type, MediaTargetType targetType, string fileName);
     Task SaveFileInHostFromBase64(Media media);
 }

@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\RestAPI\Sample.RestApi\Sample.RestApi.csproj" />
     <ProjectReference Include="..\Sample.Test.Tools\Sample.Test.Tools.csproj" />
   </ItemGroup>
 

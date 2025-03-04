@@ -39,7 +39,6 @@ public class EFUserRepository : BaseRepository<User>, IUserRepository
             .FirstOrDefaultAsync();
     }
 
-
     public async Task<long?> GetUserIdByMacId(string mac_Id)
     {
         return await _users

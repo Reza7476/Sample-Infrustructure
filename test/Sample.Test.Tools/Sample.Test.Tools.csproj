@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Application\Sample.Application\Sample.Application.csproj" />
     <ProjectReference Include="..\..\src\Infrastructure\Sample.Persistence.EF\Sample.Persistence.EF.csproj" />
+    <ProjectReference Include="..\..\src\RestAPI\Sample.RestApi\Sample.RestApi.csproj" />
   </ItemGroup>
 
   <ItemGroup>
