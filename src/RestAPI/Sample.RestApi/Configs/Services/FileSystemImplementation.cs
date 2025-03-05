@@ -9,6 +9,14 @@ public class FileSystemImplementation : IFileSystem
         Directory.CreateDirectory(path);
     }
 
+    public void Delete(string path)
+    {
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+        }
+    }
+
     public bool Exists(string path)
     {
         return File.Exists(path) || Directory.Exists(path);

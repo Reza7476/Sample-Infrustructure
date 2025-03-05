@@ -48,5 +48,17 @@ public class UsersController : ControllerBase
 
         await _userHandlerService.UpdateProfileImage(dto, userId);
     }
-   
+
+    [HttpGet("get-by-id")]
+    public async Task <GetUserInfoByIdDto?> GetUserById(long id)
+    {
+        return await _service.GetById(id);
+    }
+
+    [HttpPost("add-user")]
+    public async Task AddUser( string name)
+    {
+        await _service.AddUser(name);
+    }
+
 }

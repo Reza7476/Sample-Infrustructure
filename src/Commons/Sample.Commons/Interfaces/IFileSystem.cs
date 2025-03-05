@@ -7,4 +7,6 @@ public interface IFileSystem : IScope
     bool Exists(string path); // برای چک کردن وجود فایل یا دایرکتوری
     Task WriteAllBytesAsync(string path, byte[] bytes); // برای نوشتن فایل به صورت async
     string[] GetFiles(string directoryPath);
+    void Delete(string path);
+
 }

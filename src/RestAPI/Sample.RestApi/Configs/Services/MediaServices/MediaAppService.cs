@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Sample.Application.Medias.Dtos;
+﻿using Sample.Application.Medias.Dtos;
 using Sample.Application.Medias.Exceptions;
 using Sample.Application.Medias.Services;
 using Sample.Commons.Interfaces;
@@ -166,15 +164,7 @@ public class MediaAppService : IMediaService
         switch (type)
         {
             case MediaType.Image:
-                URIAddress += "Images/";
-                switch (targetType)
-                {
-                    case MediaTargetType.Category_Icon:
-                        URIAddress += "CategoryIcon";
-                        break;
-                    default:
-                        break;
-                }
+                URIAddress += "Images";
 
                 break;
             case MediaType.Voice:
@@ -189,10 +179,12 @@ public class MediaAppService : IMediaService
                 URIAddress += "PDFs";
 
                 break;
+
             default:
                 break;
         }
 
+        URIAddress += "/" + targetType.ToString();
         return URIAddress;
 
     }
@@ -313,7 +305,7 @@ public class MediaAppService : IMediaService
                 var matchingFiles = files.Where(file => Path.GetFileNameWithoutExtension(file).Contains(fileName)).ToList();
                 foreach (var file in matchingFiles)
                 {
-                    await Task.Run(() => File.Delete(file));
+                    await Task.Run(() => _fileSystem.Delete(file));
                 }
             }
         }
