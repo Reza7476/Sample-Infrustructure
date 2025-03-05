@@ -1,8 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sample.Core.Entities.Employees;
 using Sample.Core.Entities.Generals;
-using Sample.Core.Entities.Medias;
-using Sample.Core.Entities.Users;
 using Sample.Persistence.EF.EntitiesConfig;
 
 namespace Sample.Persistence.EF.DbContexts;
@@ -13,10 +10,6 @@ public class EFDataContext : DbContext
         : base(options)
     {
     }
-
-    public DbSet<User> Users { get; set; }
-    public DbSet<Product> Products { get; set; }
-    public DbSet<Media> Medias { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

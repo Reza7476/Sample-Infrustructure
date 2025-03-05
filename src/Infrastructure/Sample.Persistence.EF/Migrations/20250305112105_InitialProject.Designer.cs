@@ -11,8 +11,8 @@ using Sample.Persistence.EF.DbContexts;
 namespace Sample.Persistence.EF.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    [Migration("20250301134213_SetMediaTable")]
-    partial class SetMediaTable
+    [Migration("20250305112105_InitialProject")]
+    partial class InitialProject
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,41 +24,7 @@ namespace Sample.Persistence.EF.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Sample.Core.Entities.Employees.Product", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<int>("Age")
-                        .HasColumnType("int");
-
-                    b.Property<long>("CreatedAt")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("CreatedBy")
-                        .HasMaxLength(36)
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long?>("UpdatedAt")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("UpdatedBy")
-                        .HasMaxLength(36)
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Sample.Core.Entities.Media.Media", b =>
+            modelBuilder.Entity("Sample.Core.Entities.Medias.Media", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -114,9 +80,14 @@ namespace Sample.Persistence.EF.Migrations
                         .HasMaxLength(36)
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Medias");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Medias", (string)null);
                 });
 
             modelBuilder.Entity("Sample.Core.Entities.Users.User", b =>
@@ -135,22 +106,21 @@ namespace Sample.Persistence.EF.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Gender")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MacId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Mobile")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NationalCode")
@@ -168,7 +138,21 @@ namespace Sample.Persistence.EF.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
+                });
+
+            modelBuilder.Entity("Sample.Core.Entities.Medias.Media", b =>
+                {
+                    b.HasOne("Sample.Core.Entities.Users.User", "User")
+                        .WithMany("Medias")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Sample.Core.Entities.Users.User", b =>
+                {
+                    b.Navigation("Medias");
                 });
 #pragma warning restore 612, 618
         }

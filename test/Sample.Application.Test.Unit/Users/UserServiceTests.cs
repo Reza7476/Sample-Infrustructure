@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Sample.Application.Users.Services;
+using Sample.Core.Entities.Users;
 using Sample.Test.Tools.Entities.Users;
 using Sample.Test.Tools.Infrastructure.DataBaseConfig.Unit;
 
@@ -25,7 +26,7 @@ public class UserServiceTests : BusinessUnitTest
             .Build();
         await _sut.CreateAsync(dto);
 
-        var expected = ReadContext.Users.FirstOrDefault();
+        var expected = ReadContext.Set<User>().FirstOrDefault();
         expected!.FirstName.Should().Be(dto.Name);
         expected.LastName.Should().Be(dto.Family);
         expected.Mobile.Should().Be(dto.PhoneNumber);
