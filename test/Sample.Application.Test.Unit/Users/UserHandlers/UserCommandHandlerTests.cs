@@ -7,6 +7,7 @@ using Sample.Application.Medias.Services;
 using Sample.Application.Users.Services;
 using Sample.Application.Users.UserHandlers;
 using Sample.Commons.UnitOfWork;
+using Sample.Core.Entities.Medias;
 using Sample.Persistence.EF.DbContexts;
 using Sample.Persistence.EF.EntitiesConfig.Medias;
 using Sample.Persistence.EF.EntitiesConfig.Users;
@@ -62,7 +63,7 @@ public class UserCommandHandlerTests : BusinessUnitTest
 
         await _sut.AddProfileImage(dto, user.Id);
 
-        var expected = ReadContext.Medias.FirstOrDefault();
+        var expected = ReadContext.Set<Media>().FirstOrDefault();
         expected.Should().NotBeNull();
         expected!.Title.Should().Be(media.Title);
         expected.UniqueName.Should().Be(media.UniqueName);

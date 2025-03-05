@@ -14,6 +14,7 @@ public class EFUserRepository : BaseRepository<User>, IUserRepository
 {
 
     private readonly DbSet<User> _users;
+   
     public EFUserRepository(EFDataContext context) : base(context)
     {
         _users = context.Set<User>();

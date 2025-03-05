@@ -8,10 +8,7 @@ public class MediaConfiguration : IEntityTypeConfiguration<Media>
 {
     public void Configure(EntityTypeBuilder<Media> builder)
     {
-
-        builder.ToTable("Medias").HasKey(x => x.Id);
-
-        builder.Property(_ => _.Id).IsRequired().ValueGeneratedOnAdd();
+        builder.ToTable("Medias");
 
         builder.Property(_ => _.UniqueName).IsRequired();
         
@@ -34,6 +31,5 @@ public class MediaConfiguration : IEntityTypeConfiguration<Media>
         builder.Property(_ => _.TargetType).IsRequired();
         
         builder.Property(_ => _.UserId).IsRequired(false);
-        
     }
 }
