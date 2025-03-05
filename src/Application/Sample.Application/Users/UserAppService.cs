@@ -19,6 +19,20 @@ public class UserAppService : IUserService
         _unitOfWork = unitOfWork;
     }
 
+    public async Task AddUser(string name)
+    {
+        var user = new User()
+        {
+            FirstName = name,
+            LastName=name+name,
+             Gender= Gender.NotSet,   
+        };
+
+        await _repository.AddAsync(user);
+        await _unitOfWork.Complete();
+
+    }
+
     public async Task<long> CreateAsync(UserInfoResponseDto dto)
     {
         var user = new User()
@@ -40,4 +54,8 @@ public class UserAppService : IUserService
         return await _repository.GetAllUsers(pagination);
     }
 
+    public async Task<GetUserInfoByIdDto?> GetById(long id)
+    {
+        return await _repository.GetById(id);
+    }
 }

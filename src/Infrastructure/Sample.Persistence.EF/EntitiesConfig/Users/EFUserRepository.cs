@@ -2,6 +2,7 @@
 using Sample.Application.Users.Dtos;
 using Sample.Application.Users.Services;
 using Sample.Commons.Interfaces;
+using Sample.Core.Entities.Medias;
 using Sample.Core.Entities.Users;
 using Sample.Persistence.EF.DbContexts;
 using Sample.Persistence.EF.Extensions.Paginations;
@@ -22,13 +23,33 @@ public class EFUserRepository : BaseRepository<User>, IUserRepository
     {
         var query = _users.Select(_ => new GetAllUsersDto()
         {
-            Email = _.Email,
             Id = _.Id,
             Name = _.FirstName,
+            Email = _.Email,
         }).AsQueryable();
 
 
         return await query.Paginate(pagination ?? new Pagination());
+    }
+
+    public async Task<GetUserInfoByIdDto?> GetById(long id)
+    {
+        var query = await _users.Include(_ => _.Medias)
+           .Where(_ => _.Id == id)
+           .Select(_ => new GetUserInfoByIdDto()
+           {
+               Email = _.Email,
+               FirstName = _.FirstName,
+               LastName = _.LastName,
+               Gender = _.Gender,
+               ProfileUrl = _.Medias
+                .FirstOrDefault(media => media.TargetType == MediaTargetType.UserProfile_Image) != null ? _.Medias
+                .First(media => media.TargetType == MediaTargetType.UserProfile_Image)
+                .GetURL() : null
+           }).FirstOrDefaultAsync();
+
+        return query;
+
     }
 
     public async Task<User?> GetUserAndMediaById(long id)

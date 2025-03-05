@@ -7,6 +7,7 @@ namespace Sample.Application.Users.Services;
 public interface IUserRepository : IBaseRepository<User>, IRepository
 {
     Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null);
+    Task<GetUserInfoByIdDto?> GetById(long id);
     Task<User?> GetUserAndMediaById(long id);
     Task<long?> GetUserIdByMacId(string mac_Id);
 

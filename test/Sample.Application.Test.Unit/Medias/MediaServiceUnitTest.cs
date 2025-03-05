@@ -2,17 +2,15 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Moq;
-using Sample.Application.Medias;
 using Sample.Application.Medias.Dtos;
 using Sample.Application.Medias.Exceptions;
 using Sample.Application.Medias.Services;
 using Sample.Commons.Interfaces;
 using Sample.Core.Entities.Medias;
+using Sample.RestApi.Configs.Services.MediaServices;
 using Sample.Test.Tools.Entities.Medias;
 using Sample.Test.Tools.Infrastructure.DataBaseConfig.Unit;
 using System.Text;
-
-using Sample.RestApi.Configs.Services.MediaServices;
 namespace Sample.Application.Test.Unit.Medias;
 
 public class MediaServiceUnitTest : BusinessUnitTest
@@ -89,7 +87,7 @@ public class MediaServiceUnitTest : BusinessUnitTest
 
 
     [Fact]
-    public async Task SaveFileInHostFromBase64_ShouldCallFileOperations()
+    public async Task SaveFileInHostFromBase64_should_save_file_in_host()
     {
         var base64Data = Convert.ToBase64String(new byte[] { 1, 2, 3, 4, 5 });
         var dto = new MediaBuilder()
@@ -116,6 +114,32 @@ public class MediaServiceUnitTest : BusinessUnitTest
         _mockFileSystem.Verify(fs => fs.WriteAllBytesAsync(expectedThumbFilePath, It.IsAny<byte[]>()), Times.Once);
     }
 
+    [Fact]
+    public async Task SaveFileInHostFromBase64_should_throw_exception_when_main_base64_is_empty()
+    {
+        var media = new MediaBuilder()
+            .WithMainBase64("")
+            .Build();
+        Func<Task> expected = async () => await _sut.SaveFileInHostFromBase64(media);
+
+        await expected.Should().ThrowAsync<ArgumentNullException>();
+    }
+
+
+    [Theory]
+    [InlineData(MediaType.Image, MediaTargetType.UserProfile_Image, "testFile")]
+    public async Task DeleteFileInHost_should_delete_file_from_host_properly(MediaType type, MediaTargetType targetType, string fileName)
+    {
+        var directoryPath = "Media/Images";
+        var fullDirectoryPath = Path.Combine("wwwroot", directoryPath);
+        var existingFile = Path.Combine(fullDirectoryPath, $"{fileName}_123.jpg");
+        _mockFileSystem.Setup(fs => fs.Exists(It.IsAny<string>())).Returns(true);
+        _mockFileSystem.Setup(fs => fs.GetFiles(It.IsAny<string>())).Returns(new[] { existingFile });
+
+        await _sut.DeleteFileInHost(type, targetType, fileName);
+
+        _mockFileSystem.Verify(fs => fs.Delete(existingFile), Times.Once);
+    }
 }
 
 
