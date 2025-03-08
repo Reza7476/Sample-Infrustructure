@@ -54,4 +54,16 @@ public class UserAppService : IUserService
     {
         return await _unitOfWork.UserRepository.GetById(id);
     }
+
+    public async Task SetUserStatus()
+    {
+        var users = await _unitOfWork.UserRepository.GetUserNotSetGender();
+
+        foreach (var user in users) 
+        {
+                user.UserStatus = UserStatus.NOK;
+        }
+
+        await _unitOfWork.Complete();   
+    }
 }

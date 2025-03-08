@@ -1,12 +1,18 @@
-﻿using Sample.Persistence.EF;
+﻿using Hangfire;
+using Hangfire.Dashboard;
+using Hangfire.SqlServer;
+using Sample.Persistence.EF;
 using Sample.RestApi;
 using Sample.RestApi.Configs.Cors;
+using Sample.RestApi.Configs.HangFires;
 using Sample.RestApi.Configs.Middleware;
+using Sample.RestApi.Configs.RequrringJobs;
 using Sample.RestApi.Configs.Services;
 using Sample.RestApi.Configs.Swagger;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Services.AddControllers();
 
@@ -39,6 +45,7 @@ var settings = builder.Configuration
     .AddJsonFile("infrastructureAppSettings.json", optional: false, reloadOnChange: true)
     .Build();
 
+builder.Services.ConfigureHangfire(settings);
 builder.Services.AddInfrastructureServices(settings);
 builder.Services.AddPresentationService(settings);
 
@@ -50,8 +57,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
 app.UseStaticFiles();
+
+app.UseHangfireDashboard();
+
+app.SetUpRequrringJob();
 
 app.UseRouting();
 
