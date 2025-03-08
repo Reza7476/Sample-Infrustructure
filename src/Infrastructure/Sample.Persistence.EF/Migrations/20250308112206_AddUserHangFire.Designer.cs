@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sample.Persistence.EF.DbContexts;
 
@@ -10,9 +11,11 @@ using Sample.Persistence.EF.DbContexts;
 namespace Sample.Persistence.EF.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    partial class EFDataContextModelSnapshot : ModelSnapshot
+    [Migration("20250308112206_AddUserHangFire")]
+    partial class AddUserHangFire
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,11 +135,6 @@ namespace Sample.Persistence.EF.Migrations
                     b.Property<long?>("UpdatedBy")
                         .HasMaxLength(36)
                         .HasColumnType("bigint");
-
-                    b.Property<byte>("UserStatus")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("tinyint")
-                        .HasDefaultValue((byte)0);
 
                     b.HasKey("Id");
 

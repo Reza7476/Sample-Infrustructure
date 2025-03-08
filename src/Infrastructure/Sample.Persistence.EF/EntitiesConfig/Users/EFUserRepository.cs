@@ -7,7 +7,6 @@ using Sample.Core.Entities.Users;
 using Sample.Persistence.EF.DbContexts;
 using Sample.Persistence.EF.Extensions.Paginations;
 
-
 namespace Sample.Persistence.EF.EntitiesConfig.Users;
 
 public class EFUserRepository : BaseRepository<User>, IUserRepository
@@ -67,6 +66,12 @@ public class EFUserRepository : BaseRepository<User>, IUserRepository
             .Where(_ => _.MacId == mac_Id)
             .Select(_ => _.Id)
             .FirstOrDefaultAsync();
+    }
+
+    public async Task<List<User>> GetUserNotSetGender()
+    {
+        return await _users
+            .Where(_ => _.Gender == Gender.NotSet).ToListAsync();
     }
 
     public async Task<bool> IsExistByMobile(string mobile)

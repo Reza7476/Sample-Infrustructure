@@ -10,6 +10,6 @@ public interface IUserRepository : IBaseRepository<User>, IRepository
     Task<GetUserInfoByIdDto?> GetById(long id);
     Task<User?> GetUserAndMediaById(long id);
     Task<long?> GetUserIdByMacId(string mac_Id);
-
+    Task<List<User>> GetUserNotSetGender();
     Task<bool> IsExistByMobile(string mobile);
 }

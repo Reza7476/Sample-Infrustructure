@@ -10,4 +10,5 @@ public interface IUserService : IService
     Task<long> CreateAsync(UserInfoResponseDto dto);
     Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null);
     Task<GetUserInfoByIdDto?> GetById(long id);
+    Task SetUserStatus();
 }
