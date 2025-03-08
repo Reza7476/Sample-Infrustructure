@@ -1,19 +1,17 @@
 ﻿using FluentAssertions;
-using LegalCrm.TestTools.Infrastructure.DummyData;
 using Microsoft.AspNetCore.Http;
 using Moq;
+using Sample.Application.Interfaces;
 using Sample.Application.Medias.Dtos;
 using Sample.Application.Medias.Services;
 using Sample.Application.Users.Services;
 using Sample.Application.Users.UserHandlers;
-using Sample.Commons.UnitOfWork;
 using Sample.Core.Entities.Medias;
 using Sample.Persistence.EF.DbContexts;
-using Sample.Persistence.EF.EntitiesConfig.Medias;
-using Sample.Persistence.EF.EntitiesConfig.Users;
 using Sample.Test.Tools.Entities.Medias;
 using Sample.Test.Tools.Entities.Users;
 using Sample.Test.Tools.Infrastructure.DataBaseConfig.Unit;
+using Sample.Test.Tools.Infrastructure.DummyData;
 
 namespace Sample.Application.Test.Unit.Users.UserHandlers;
 
@@ -22,27 +20,19 @@ public class UserCommandHandlerTests : BusinessUnitTest
     private readonly IUserHandler _sut;
     private readonly IUserService _userService;
     private readonly Mock<IMediaService> _mediaServiceMock;
-    private readonly IUserRepository _userRepository;
-    private readonly IMediaRepository _mediaRepository;
     private readonly IUnitOfWork _unitOfWork;
-
 
     public UserCommandHandlerTests()
     {
         _userService = UserServiceFactory.Create(SetupContext);
         _mediaServiceMock = new Mock<IMediaService>();
-        _userRepository = new EFUserRepository(SetupContext);
-        _mediaRepository = new EFMediaRepository(SetupContext);
         _unitOfWork = new EFUnitOfWork(SetupContext);
 
         _sut = new UserCommandHandler(
             _mediaServiceMock.Object,
             _userService,
-            _userRepository,
-            _mediaRepository,
             _unitOfWork);
     }
-
 
     [Theory]
     [DummyFormFile]

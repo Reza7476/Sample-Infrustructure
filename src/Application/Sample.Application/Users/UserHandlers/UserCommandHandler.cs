@@ -1,12 +1,10 @@
-﻿using Sample.Application.Medias.Dtos;
+﻿using Sample.Application.Interfaces;
+using Sample.Application.Medias.Dtos;
 using Sample.Application.Medias.Services;
-using Sample.Application.Users.Dtos;
 using Sample.Application.Users.Exceptions;
 using Sample.Application.Users.Services;
 using Sample.Commons.Exceptions;
-using Sample.Commons.UnitOfWork;
 using Sample.Core.Entities.Medias;
-using Sample.Core.Entities.Users;
 
 namespace Sample.Application.Users.UserHandlers;
 
@@ -14,21 +12,15 @@ public class UserCommandHandler : IUserHandler
 {
     private readonly IUserService _userService;
     private readonly IMediaService _mediaService;
-    private readonly IUserRepository _userRepository;
-    private readonly IMediaRepository _mediaRepository;
     private readonly IUnitOfWork _unitOfWork;
 
     public UserCommandHandler(
         IMediaService mediaService,
         IUserService userService,
-        IUserRepository repository,
-        IMediaRepository mediaRepository,
         IUnitOfWork unitOfWork)
     {
         _mediaService = mediaService;
         _userService = userService;
-        _userRepository = repository;
-        _mediaRepository = mediaRepository;
         _unitOfWork = unitOfWork;
     }
 
@@ -37,7 +29,8 @@ public class UserCommandHandler : IUserHandler
         await _unitOfWork.Begin();
         try
         {
-            var user = await _userRepository.GetUserAndMediaById(userId) ?? throw new UserNotFoundException(); 
+            var user = await _unitOfWork.UserRepository
+                .GetUserAndMediaById(userId) ?? throw new UserNotFoundException();
 
             if (!user.Medias.Any(_ => _.Type == MediaType.Image
                 && _.TargetType == MediaTargetType.UserProfile_Image))
@@ -50,10 +43,11 @@ public class UserCommandHandler : IUserHandler
                     CreateThumbnail = true,
                 };
 
-                var image = await _mediaService.CreateMediaModelFromFile(mediaDto) ?? throw new ErrorInCreateImageException();
+                var image = await _mediaService
+                    .CreateMediaModelFromFile(mediaDto) ?? throw new ErrorInCreateImageException();
 
-                await _mediaRepository.AddAsync(image);
-                 user.AddMedia(image);
+                await _unitOfWork.MediaRepository.AddAsync(image);
+                user.AddMedia(image);
                 await _unitOfWork.Commit();
 
                 await _mediaService.SaveFileInHostFromBase64(image);
@@ -71,7 +65,8 @@ public class UserCommandHandler : IUserHandler
         await _unitOfWork.Begin();
         try
         {
-            var user = await _userRepository.GetUserAndMediaById(userId)?? throw new UserNotFoundException();
+            var user = await _unitOfWork.UserRepository
+                .GetUserAndMediaById(userId) ?? throw new UserNotFoundException();
 
             if (user!.Medias.Any(_ => _.Type == MediaType.Image
                 && _.TargetType == MediaTargetType.UserProfile_Image))
@@ -82,14 +77,16 @@ public class UserCommandHandler : IUserHandler
                     TargetType = MediaTargetType.UserProfile_Image,
                     File = dto.File,
                     CreateThumbnail = true,
-                    Media = user.Medias.First(_ => _.Type == MediaType.Image && _.TargetType == MediaTargetType.UserProfile_Image)
+                    Media = user.Medias.First(_ => _.Type == MediaType.Image && 
+                    _.TargetType == MediaTargetType.UserProfile_Image)
                 };
 
                 var image = await _mediaService.CreateMediaModelFromFile(mediaDto);
 
-                _mediaRepository.Update(image);
+                _unitOfWork.MediaRepository.Update(image);
 
-                await _mediaService.DeleteFileInHost(type: MediaType.Image, image.TargetType, image.UniqueName);
+                await _mediaService.DeleteFileInHost(type: MediaType.Image,
+                    image.TargetType, image.UniqueName);
                 await _unitOfWork.Commit();
                 await _mediaService.SaveFileInHostFromBase64(image);
             }
@@ -100,5 +97,5 @@ public class UserCommandHandler : IUserHandler
             throw new Exception(ex.Message);
         }
     }
-   
+
 }

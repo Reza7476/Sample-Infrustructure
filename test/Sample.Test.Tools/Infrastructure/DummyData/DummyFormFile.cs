@@ -2,7 +2,7 @@
 using System.Reflection;
 using Xunit.Sdk;
 
-namespace LegalCrm.TestTools.Infrastructure.DummyData;
+namespace Sample.Test.Tools.Infrastructure.DummyData;
 
 public class DummyFormFile : DataAttribute
 {
