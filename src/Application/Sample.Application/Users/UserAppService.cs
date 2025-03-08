@@ -1,21 +1,17 @@
-﻿using Sample.Application.Users.Dtos;
+﻿using Sample.Application.Interfaces;
+using Sample.Application.Users.Dtos;
 using Sample.Application.Users.Services;
 using Sample.Commons.Interfaces;
-using Sample.Commons.UnitOfWork;
 using Sample.Core.Entities.Users;
 
 namespace Sample.Application.Users;
 
 public class UserAppService : IUserService
 {
-    private readonly IUserRepository _repository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public UserAppService(
-        IUserRepository repository,
-        IUnitOfWork unitOfWork)
+    public UserAppService(IUnitOfWork unitOfWork)
     {
-        _repository = repository;
         _unitOfWork = unitOfWork;
     }
 
@@ -24,11 +20,11 @@ public class UserAppService : IUserService
         var user = new User()
         {
             FirstName = name,
-            LastName=name+name,
-             Gender= Gender.NotSet,   
+            LastName = name + name,
+            Gender = Gender.NotSet,
         };
 
-        await _repository.AddAsync(user);
+        await _unitOfWork.UserRepository.AddAsync(user);
         await _unitOfWork.Complete();
 
     }
@@ -44,18 +40,18 @@ public class UserAppService : IUserService
             Mobile = dto.PhoneNumber,
             Gender = Gender.NotSet,
         };
-        await _repository.AddAsync(user);
+        await _unitOfWork.UserRepository.AddAsync(user);
         await _unitOfWork.Complete();
         return user.Id;
     }
 
     public async Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null)
     {
-        return await _repository.GetAllUsers(pagination);
+        return await _unitOfWork.UserRepository.GetAllUsers(pagination);
     }
 
     public async Task<GetUserInfoByIdDto?> GetById(long id)
     {
-        return await _repository.GetById(id);
+        return await _unitOfWork.UserRepository.GetById(id);
     }
 }

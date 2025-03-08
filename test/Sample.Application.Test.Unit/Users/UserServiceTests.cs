@@ -2,14 +2,13 @@
 using Sample.Application.Users.Services;
 using Sample.Core.Entities.Users;
 using Sample.Test.Tools.Entities.Users;
-using Sample.Test.Tools.Infrastructure.DataBaseConfig.Unit;
+using Sample.Test.Tools.Infrastructure.DataBaseConfig.Integration;
 
 namespace Sample.Application.Test.Unit.Users;
 
-public class UserServiceTests : BusinessUnitTest
+public class UserServiceTests : BusinessIntegrationTest
 {
     private readonly IUserService _sut;
-
     public UserServiceTests()
     {
         _sut = UserServiceFactory.Create(SetupContext);
@@ -24,6 +23,7 @@ public class UserServiceTests : BusinessUnitTest
             .WithLastName("reza")
             .WithName("Dehghani")
             .Build();
+
         await _sut.CreateAsync(dto);
 
         var expected = ReadContext.Set<User>().FirstOrDefault();

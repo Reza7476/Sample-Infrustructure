@@ -25,6 +25,18 @@ public class UsersController : ControllerBase
         _userHandlerService = userHandlerService;
     }
  
+    [HttpPost("add")]
+    public async Task AddUser( string name)
+    {
+        await _service.AddUser(name);
+    }
+    
+    [HttpGet("{id}")]
+    public async Task <GetUserInfoByIdDto?> GetUserById(long id)
+    {
+        return await _service.GetById(id);
+    }
+    
     [HttpGet("all")]
     public Task<IPageResult<GetAllUsersDto>> GetAllUsers()
     {
@@ -35,30 +47,15 @@ public class UsersController : ControllerBase
     public async Task AddProfileImage([FromForm] AddMediaDto dto)
     {
         //var userId = _userToken.UserId;
-       var userId = 1;
+       var userId = 3;
         await _userHandlerService.AddProfileImage(dto, userId);
     }
 
     [HttpPut("update-profile-image")]
-
     public async Task UpdateProfileImage([FromForm ] AddMediaDto dto)
     {
         //var userId = _userToken.UserId;
         var userId = 1;
-
         await _userHandlerService.UpdateProfileImage(dto, userId);
     }
-
-    [HttpGet("get-by-id")]
-    public async Task <GetUserInfoByIdDto?> GetUserById(long id)
-    {
-        return await _service.GetById(id);
-    }
-
-    [HttpPost("add-user")]
-    public async Task AddUser( string name)
-    {
-        await _service.AddUser(name);
-    }
-
 }

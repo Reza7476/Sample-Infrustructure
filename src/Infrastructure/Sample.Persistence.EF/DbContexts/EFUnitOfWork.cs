@@ -1,14 +1,25 @@
-﻿using Sample.Commons.UnitOfWork;
+﻿using Sample.Application.Interfaces;
+using Sample.Application.Medias.Services;
+using Sample.Application.Users.Services;
+using Sample.Persistence.EF.EntitiesConfig.Medias;
+using Sample.Persistence.EF.EntitiesConfig.Users;
 
 namespace Sample.Persistence.EF.DbContexts;
 
 public class EFUnitOfWork : IUnitOfWork
 {
     private readonly EFDataContext _context;
+    private IUserRepository? _userRepository;
+    private IMediaRepository? _mediaRepository;
     public EFUnitOfWork(EFDataContext dataContext)
     {
         _context = dataContext;
+     
     }
+
+    public IUserRepository UserRepository => _userRepository ?? new EFUserRepository(_context);
+
+    public IMediaRepository MediaRepository => _mediaRepository ?? new EFMediaRepository(_context);
 
     public async Task Begin()
     {

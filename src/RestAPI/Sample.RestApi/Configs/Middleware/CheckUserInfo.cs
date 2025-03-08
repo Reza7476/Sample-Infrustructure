@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
+using Sample.Application.Interfaces;
 using Sample.Application.Users.Dtos;
 using Sample.Application.Users.Services;
 using Sample.Commons.Interfaces;
-using Sample.Commons.UnitOfWork;
 using System.Net.Http.Headers;
 
 namespace Sample.RestApi.Configs.Middleware;

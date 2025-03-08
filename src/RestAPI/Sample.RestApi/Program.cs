@@ -23,6 +23,7 @@ builder.Services.AddCorsConfiguration();
 builder.Services.AddSwagger();
 
 var isDev = builder.Environment.IsDevelopment();
+
 string? infrastructureDirectory;
 if (isDev)
 {
