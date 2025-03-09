@@ -45,7 +45,7 @@ var settings = builder.Configuration
     .AddJsonFile("infrastructureAppSettings.json", optional: false, reloadOnChange: true)
     .Build();
 
-builder.Services.ConfigureHangfire(settings);
+builder.Services.ConfigureHangfireService(settings);
 builder.Services.AddInfrastructureServices(settings);
 builder.Services.AddPresentationService(settings);
 
@@ -59,7 +59,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
-app.UseHangfireDashboard();
+app.UseAppHangfire(settings);
 
 app.SetUpRequrringJob();
 
