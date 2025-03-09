@@ -8,7 +8,7 @@ public class UserHangFireConfiguration : IEntityTypeConfiguration<UserHangfire>
 {
     public void Configure(EntityTypeBuilder<UserHangfire> builder)
     {
-        builder.ToTable("UserH;angfires");
+        builder.ToTable("UserHangfires");
         builder.Property(_ => _.Status).IsRequired();
         builder.Property(_ => _.UserId).IsRequired();
     }
