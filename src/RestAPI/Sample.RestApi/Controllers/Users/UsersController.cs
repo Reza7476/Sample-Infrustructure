@@ -27,9 +27,9 @@ public class UsersController : ControllerBase
     }
 
     [HttpPost("add")]
-    public async Task AddUser(string name,string mobile,string lastName)
+    public async Task AddUser(AddUserDto dto)
     {
-        await _service.AddUser(name,lastName,mobile);
+        await _service.AddUser(dto);
     }
 
     [HttpGet("{id}")]

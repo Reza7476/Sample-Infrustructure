@@ -1,8 +1,10 @@
 ﻿using Sample.Application.Interfaces;
 using Sample.Application.Users.Dtos;
+using Sample.Application.Users.Exceptions;
 using Sample.Application.Users.Services;
 using Sample.Commons.Interfaces;
 using Sample.Core.Entities.Users;
+using Sample.Persistence.EF.Extensions;
 
 namespace Sample.Application.Users;
 
@@ -15,21 +17,30 @@ public class UserAppService : IUserService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task AddUser(string name,
-        string lastName,
-        string mobile)
+    public async Task AddUser(AddUserDto dto)
     {
+        StopIfNationalCodeIsInvalid(dto);
+
         var user = new User()
         {
-            FirstName = name,
-            LastName = lastName,
-            Mobile=mobile,
+            FirstName = dto.FirstName,
+            LastName = dto.LastName,
+            Mobile = dto.Mobile,
+            NationalCode = dto.NationalCode,
             Gender = Gender.NotSet,
         };
 
         await _unitOfWork.UserRepository.AddAsync(user);
         await _unitOfWork.Complete();
 
+    }
+
+    private static void StopIfNationalCodeIsInvalid(AddUserDto dto)
+    {
+        if (dto.NationalCode != null && !dto.NationalCode.NationalCode())
+        {
+            throw new NationalCodeIsInvalidException();
+        }
     }
 
     public async Task<long> CreateAsync(UserInfoResponseDto dto)
@@ -53,7 +64,7 @@ public class UserAppService : IUserService
         GetAllUserFilterDto? filter = null,
         string? search = null)
     {
-        return await _unitOfWork.UserRepository.GetAllUsers(pagination,filter, search);
+        return await _unitOfWork.UserRepository.GetAllUsers(pagination, filter, search);
     }
 
     public async Task<GetUserInfoByIdDto?> GetById(long id)
