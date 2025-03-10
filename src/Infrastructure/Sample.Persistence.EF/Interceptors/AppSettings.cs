@@ -3,7 +3,7 @@ using Sample.Persistence.EF.Interfaces;
 
 namespace Sample.Persistence.EF.Interceptors;
 
-internal class AppSettings : IInfraastructureAppService
+public class AppSettings : IInfrastructureAppService
 {
     public string? ConnectionString  {get;}
 
