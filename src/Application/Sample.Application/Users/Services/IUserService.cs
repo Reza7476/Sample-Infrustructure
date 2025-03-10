@@ -6,7 +6,7 @@ namespace Sample.Application.Users.Services;
 
 public interface IUserService : IService
 {
-    Task AddUser(string name, string lastName, string mobile);
+    Task AddUser(AddUserDto dto);
     Task<long> CreateAsync(UserInfoResponseDto dto);
     
     Task<IPageResult<GetAllUsersDto>> GetAllUsers(
