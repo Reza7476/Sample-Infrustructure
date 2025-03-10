@@ -12,10 +12,10 @@ public class User : BaseEntity
     }
 
     public string? MacId { get; set; }
-    public string? FirstName { get; set; }
-    public string? LastName { get; set; }
+    public required string FirstName { get; set; }
+    public required string LastName { get; set; }
+    public required string Mobile { get; set; }
     public string? Email { get; set; }
-    public string? Mobile { get; set; }
     public string? ProfileUrl { get; set; }
     public Gender Gender { get; set; }
     public UserStatus UserStatus { get; set; }

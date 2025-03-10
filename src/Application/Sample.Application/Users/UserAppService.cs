@@ -15,12 +15,15 @@ public class UserAppService : IUserService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task AddUser(string name)
+    public async Task AddUser(string name,
+        string lastName,
+        string mobile)
     {
         var user = new User()
         {
             FirstName = name,
-            LastName = name + name,
+            LastName = lastName,
+            Mobile=mobile,
             Gender = Gender.NotSet,
         };
 
@@ -45,9 +48,12 @@ public class UserAppService : IUserService
         return user.Id;
     }
 
-    public async Task<IPageResult<GetAllUsersDto>> GetAllUsers(IPagination? pagination = null)
+    public async Task<IPageResult<GetAllUsersDto>> GetAllUsers(
+        IPagination? pagination = null,
+        GetAllUserFilterDto? filter = null,
+        string? search = null)
     {
-        return await _unitOfWork.UserRepository.GetAllUsers(pagination);
+        return await _unitOfWork.UserRepository.GetAllUsers(pagination,filter, search);
     }
 
     public async Task<GetUserInfoByIdDto?> GetById(long id)
@@ -59,11 +65,11 @@ public class UserAppService : IUserService
     {
         var users = await _unitOfWork.UserRepository.GetUserNotSetGender();
 
-        foreach (var user in users) 
+        foreach (var user in users)
         {
-                user.UserStatus = UserStatus.NOK;
+            user.UserStatus = UserStatus.NOK;
         }
 
-        await _unitOfWork.Complete();   
+        await _unitOfWork.Complete();
     }
 }

@@ -26,7 +26,7 @@ public class UserServiceTests : BusinessIntegrationTest
         var expected = await _sut.GetAllUsers();
 
         expected.Elements.First().Email.Should().Be(user.Email);
-        expected.Elements.First().Name.Should().Be(user.FirstName);
+        expected.Elements.First().FirstName.Should().Be(user.FirstName);
         expected.Elements.First().Id.Should().Be(user.Id);
     }
 }
