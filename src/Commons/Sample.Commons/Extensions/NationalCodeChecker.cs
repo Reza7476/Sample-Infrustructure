@@ -1,4 +1,4 @@
-﻿namespace Sample.Persistence.EF.Extensions;
+﻿namespace Sample.Commons.Extensions;
 
 public static class NationalCodeChecker
 {
@@ -23,6 +23,6 @@ public static class NationalCodeChecker
         int remainder = sum % 11;
         int checkDigit = nationalCode[9] - '0';//تبدیل رقم اخر کد ملی از کاراکتر عددی به عدد صحیح 
 
-        return (remainder < 2 && checkDigit == remainder) || (remainder >= 2 && checkDigit == (11 - remainder));
+        return remainder < 2 && checkDigit == remainder || remainder >= 2 && checkDigit == 11 - remainder;
     }
 }

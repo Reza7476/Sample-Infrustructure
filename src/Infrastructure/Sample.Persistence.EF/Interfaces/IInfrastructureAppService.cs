@@ -2,7 +2,7 @@
 
 namespace Sample.Persistence.EF.Interfaces;
 
-public interface IInfraastructureAppService : IScope
+public interface IInfrastructureAppService : IScope
 {
     string? ConnectionString { get; }
 }

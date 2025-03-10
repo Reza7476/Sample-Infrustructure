@@ -2,9 +2,9 @@
 using Sample.Application.Users.Dtos;
 using Sample.Application.Users.Exceptions;
 using Sample.Application.Users.Services;
+using Sample.Commons.Extensions;
 using Sample.Commons.Interfaces;
 using Sample.Core.Entities.Users;
-using Sample.Persistence.EF.Extensions;
 
 namespace Sample.Application.Users;
 

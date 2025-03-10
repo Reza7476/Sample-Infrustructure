@@ -11,7 +11,7 @@ public static class SetUp
     public static IApplicationBuilder SetUpRequrringJob(this IApplicationBuilder app)
     {
         var jobManager = app.ApplicationServices.GetRequiredService<IRecurringJobManager>();
-        var appSettings = app.ApplicationServices.GetRequiredService<IInfraastructureAppService>();
+        var appSettings = app.ApplicationServices.GetRequiredService<IInfrastructureAppService>();
         string connectionString = appSettings.ConnectionString!;
 
         var jobIds = new List<string> {
