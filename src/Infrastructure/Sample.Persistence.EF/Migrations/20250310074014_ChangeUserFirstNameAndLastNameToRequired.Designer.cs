@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sample.Persistence.EF.DbContexts;
 
@@ -10,9 +11,11 @@ using Sample.Persistence.EF.DbContexts;
 namespace Sample.Persistence.EF.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    partial class EFDataContextModelSnapshot : ModelSnapshot
+    [Migration("20250310074014_ChangeUserFirstNameAndLastNameToRequired")]
+    partial class ChangeUserFirstNameAndLastNameToRequired
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

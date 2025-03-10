@@ -12,13 +12,13 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.Property(_ => _.MacId).IsRequired(false);
 
-        builder.Property(_ => _.FirstName);
+        builder.Property(_ => _.FirstName).IsRequired();
 
-        builder.Property(_ => _.LastName);
+        builder.Property(_ => _.LastName).IsRequired();
+
+        builder.Property(_ => _.Mobile).IsRequired();
 
         builder.Property(_ => _.Email);
-
-        builder.Property(_ => _.Mobile);
 
         builder.Property(_ => _.ProfileUrl);
 
